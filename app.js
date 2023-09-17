@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const db = require('./models');
 
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
