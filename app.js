@@ -5,7 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
-const db = require('./models');
+const Constant = require('./config/constant');
 
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -15,10 +15,16 @@ app.use(cors());
 let dir = path.join(__dirname, '/public/images');
 app.use('/images', express.static(dir));
 
-
 // user route file
-app.use("/",require("./routes/sample"));
+app.use("/api/register",require("./routes/register"));
 
+// Handling non matching request from the client
+app.use((req, res, next) => {
+    return res.status(Constant.NOT_FOUND).json({
+        code: Constant.NOT_FOUND,
+        message: Constant.REQUEST_NOT_FOUND,
+    })
+});
 
 if (process.env.NODE_ENV == "production") {
     console.log("Production ENV");
