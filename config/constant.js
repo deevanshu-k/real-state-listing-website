@@ -15,4 +15,6 @@ module.exports = {
     REQUEST_NOT_FOUND: "Route not found!",
     EMAIL_ALREADY_REGISTERED: 'Email already registered.',
     SAVE_SUCCESS: 'Requested record created successfully',
+    VERIFY_EMAIL: 'Verify your email',
+    VERIFIED_SUCCESSFULLY: 'Email verified successfully'
 }

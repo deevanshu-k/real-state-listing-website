@@ -1,5 +1,7 @@
 const Constant = require("../config/constant");
+const mail = require("../helpers/mail");
 const db = require("../models");
+const otpHelper = require("../helpers/otp");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 
@@ -10,15 +12,32 @@ tenant.register = async (req, res) => {
         // Check for required inputs
         let { username, email, password, address } = req.body;
         if (!username || !email || !password || !address) {
-            throw {
+            return res.status(Constant.BAD_REQUEST).json({
                 code: Constant.BAD_REQUEST,
                 message: Constant.REQUEST_BAD_REQUEST
-            }
+            });
         }
         password = bcrypt.hashSync(password,salt);
 
+        // If User Already Exist With Not Verified Email
+        let tenantData = await db.tenant.findOne({ where: { email: email, verified_email: false } });
+        if (tenantData) {
+            // Send Email For Otp
+            let otp = otpHelper.createOtpAndCacheOtp(email,8);
+            await mail.sendEmailVerificationOtpEmail({ email, username: tenantData.username, otp });
+            // Redirect to email verification
+            return res.status(Constant.SUCCESS_CODE).json({
+                code: Constant.SUCCESS_CODE,
+                message: "Email already exist, " + Constant.VERIFY_EMAIL,
+                data: {
+                    username: tenantData.username,
+                    email: email
+                }
+            });
+        }
+
         // Create tenant with subscription association
-        let tenant = await db.tenant.create({
+        tenantData = await db.tenant.create({
             username,
             email,
             password,
@@ -28,7 +47,8 @@ tenant.register = async (req, res) => {
                 payment_method: "NA",
             },
             address,
-            verification_status: false
+            verification_status: false,
+            verified_email: false
         }, {
             include: [
                 {
@@ -38,16 +58,17 @@ tenant.register = async (req, res) => {
         });
 
         // Check For Tenant Created
-        if (tenant) {
+        if (tenantData) {
+            // Send Email For Otp
+            let otp = otpHelper.createOtpAndCacheOtp(email,8);
+            await mail.sendEmailVerificationOtpEmail({ email, username: tenantData.username, otp });
+            // Redirect to email verification
             return res.status(Constant.SUCCESS_CODE).json({
                 code: Constant.SUCCESS_CODE,
-                message: Constant.SAVE_SUCCESS,
+                message: Constant.VERIFY_EMAIL,
                 data: {
-                    username : tenant.username,
-                    email : tenant.email,
-                    plan : tenant.subscription_plan.plan_type,
-                    verification_status : tenant.verification_status,
-                    address : tenant.address
+                    username : tenantData.username,
+                    email : tenantData.email,
                 }
             });
         }
@@ -65,10 +86,7 @@ tenant.register = async (req, res) => {
                 message: Constant.EMAIL_ALREADY_REGISTERED
             });
         }
-        // If Custom Error Thrown
-        if (error.code || error.message) {
-            return res.json(error);
-        }
+        
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.REQUEST_SERVER_ERROR

@@ -1,24 +1,43 @@
 const Constant = require("../config/constant");
+const mail = require("../helpers/mail");
 const db = require("../models");
+const otpHelper = require("../helpers/otp");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 
 let landlord = {};
 
-landlord.register = async (req,res) => {
+landlord.register = async (req, res) => {
     try {
         // Check for required inputs
         let { username, email, password, address } = req.body;
         if (!username || !email || !password || !address) {
-            throw {
+            return res.status(Constant.BAD_REQUEST).json({
                 code: Constant.BAD_REQUEST,
                 message: Constant.REQUEST_BAD_REQUEST
-            }
+            });
         }
-        password = bcrypt.hashSync(password,salt);
+        password = bcrypt.hashSync(password, salt);
+
+        // If User Already Exist With Not Verified Email
+        let landlordData = await db.landlord.findOne({ where: { email: email, verified_email: false } });
+        if (landlordData) {
+            // Send Email For Otp
+            let otp = otpHelper.createOtpAndCacheOtp(email, 8);
+            await mail.sendEmailVerificationOtpEmail({ email, username: landlordData.username, otp });
+            // Redirect to email verification
+            return res.status(Constant.SUCCESS_CODE).json({
+                code: Constant.SUCCESS_CODE,
+                message: "Email already exist, " + Constant.VERIFY_EMAIL,
+                data: {
+                    username: landlordData.username,
+                    email: email
+                }
+            });
+        }
 
         // Create landlord with subscription association
-        let landlordData = await db.landlord.create({
+        landlordData = await db.landlord.create({
             username,
             email,
             password,
@@ -28,7 +47,8 @@ landlord.register = async (req,res) => {
                 payment_method: "NA",
             },
             address,
-            verification_status: false
+            verification_status: false,
+            verified_email: false
         }, {
             include: [
                 {
@@ -39,15 +59,16 @@ landlord.register = async (req,res) => {
 
         // Check For Landlord Created
         if (landlordData) {
+            // Send Email For Otp
+            let otp = otpHelper.createOtpAndCacheOtp(email, 8);
+            await mail.sendEmailVerificationOtpEmail({ email, username: landlordData.username, otp });
+            // Redirect to email verification
             return res.status(Constant.SUCCESS_CODE).json({
                 code: Constant.SUCCESS_CODE,
-                message: Constant.SAVE_SUCCESS,
+                message: Constant.VERIFY_EMAIL,
                 data: {
-                    username : landlordData.username,
-                    email : landlordData.email,
-                    plan : landlordData.subscription_plan.plan_type,
-                    verification_status : landlordData.verification_status,
-                    address : landlordData.address
+                    username: landlordData.username,
+                    email: landlordData.email,
                 }
             });
         }
@@ -59,16 +80,13 @@ landlord.register = async (req,res) => {
         }
     } catch (error) {
         // If Landlord Already Exist
-        if(error.name == 'SequelizeUniqueConstraintError'){
+        if (error.name == 'SequelizeUniqueConstraintError') {
             return res.status(Constant.BAD_REQUEST).json({
                 code: Constant.BAD_REQUEST,
                 message: Constant.EMAIL_ALREADY_REGISTERED
             });
         }
-        // If Custom Error Thrown
-        if (error.code || error.message) {
-            return res.json(error);
-        }
+
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.REQUEST_SERVER_ERROR
