@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 const Constant = require('./config/constant');
+const schedule = require('node-schedule');
+const db = require('./models');
+const chalk = require('chalk');
 
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -27,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 if (process.env.NODE_ENV == "production") {
-    console.log("Production ENV");
+    console.log(chalk.blueBright("Production ENV"));
     httpServer = http.createServer(app);
     // for production 
     //var privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
@@ -35,10 +38,23 @@ if (process.env.NODE_ENV == "production") {
     //var credentials = {key: privateKey, cert: certificate};
     // var httpsServer = https.createServer(credentials, app);
 } else {
-    console.log("Development ENV");
+    console.log(chalk.red("Development ENV"));
     httpServer = http.createServer(app);
 }
 
 httpServer.listen(config.PORT, () => {
-    console.log(`APP LISTENING ON http://${config.HOST}:${config.PORT}`);
-})
+    console.log(chalk.blueBright(`APP LISTENING ON http://${config.HOST}:${config.PORT}`));
+});
+
+
+// Cron-Jobs
+
+schedule.scheduleJob('*/5 * * * *',async () => {
+    console.log(chalk.red("\n\n\n--------------------------Job Running!--------------------------------"));
+    console.log(chalk.redBright("Job Description : Remove un-verified email landlord and tenant"));
+    let destroyedLandlord = await db.landlord.destroy({where:{verified_email:false}});
+    let destroyedTenant = await db.tenant.destroy({where:{verified_email:false}});
+    console.log(chalk.blueBright("No of landlord destroyed: " + destroyedLandlord));
+    console.log(chalk.blueBright("No of tenant destroyed: " + destroyedTenant));
+    console.log(chalk.red("----------------------------Job Done----------------------------------"));
+});
