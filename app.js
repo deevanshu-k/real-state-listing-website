@@ -20,6 +20,7 @@ app.use('/images', express.static(dir));
 
 // user route file
 app.use("/api/register",require("./routes/register"));
+app.use("/api/login",require("./routes/login"));
 
 // Handling non matching request from the client
 app.use((req, res, next) => {
@@ -49,7 +50,7 @@ httpServer.listen(config.PORT, () => {
 
 // Cron-Jobs
 
-schedule.scheduleJob('*/5 * * * *',async () => {
+schedule.scheduleJob('*/10 * * * *',async () => {
     console.log(chalk.red("\n\n\n--------------------------Job Running!--------------------------------"));
     console.log(chalk.redBright("Job Description : Remove un-verified email landlord and tenant"));
     let destroyedLandlord = await db.landlord.destroy({where:{verified_email:false}});
