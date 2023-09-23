@@ -10,10 +10,13 @@ module.exports = {
     CONFLICT: 409,
     SERVER_ERROR: 500,
 
+    SOMETHING_WENT_WRONG: 'Something went wrong',
     REQUEST_BAD_REQUEST: "Bad request!",
     REQUEST_SERVER_ERROR: "Server error!",
     REQUEST_NOT_FOUND: "Route not found!",
     EMAIL_ALREADY_REGISTERED: 'Email already registered.',
+    USER_LOGIN_SUCCESS: 'User Login successfully',
+    USER_EMAIL_PASSWORD: "You have entered an invalid email or password",
     SAVE_SUCCESS: 'Requested record created successfully',
     VERIFY_EMAIL: 'Verify your email',
     VERIFIED_SUCCESSFULLY: 'Email verified successfully'
