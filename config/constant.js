@@ -19,5 +19,7 @@ module.exports = {
     USER_EMAIL_PASSWORD: "You have entered an invalid email or password",
     SAVE_SUCCESS: 'Requested record created successfully',
     VERIFY_EMAIL: 'Verify your email',
-    VERIFIED_SUCCESSFULLY: 'Email verified successfully'
+    VERIFIED_SUCCESSFULLY: 'Email verified successfully',
+
+    LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!'
 }
