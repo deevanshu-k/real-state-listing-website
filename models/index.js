@@ -1,4 +1,5 @@
 const dbConfig = require("../config/db.config");
+const bcrypt = require('bcryptjs');
 let Sequelize = require("sequelize");
 let initModels = require("./init-models").initModels;
 
@@ -26,6 +27,54 @@ models.Sequelize = Sequelize;
 (async () => {
     try {
         await models.sequelize.sync({ force: true });
+        if (process.env.NODE_ENV == 'development') {
+            let aOnj = {
+                username: "Test Dubey",
+                email: "deevanshukushwah80@gmail.com",
+                password: bcrypt.hashSync("Admin@123456")
+            };
+            let admin = await models.admin.create(aOnj);
+            let lOnj = {
+                username: "Test Yadav",
+                email: "astroboiscosmos@gmail.com",
+                password: bcrypt.hashSync("Landlord@123456"),
+                subscription_plan: {
+                    plan_type: "FREELANDLORD",
+                    payment_id: "NA",
+                    payment_method: "NA",
+                },
+                address: "122 bhagirath colony dharnaka",
+                verification_status: false,
+                verified_email: true
+            }
+            let landlord = await models.landlord.create(lOnj, {
+                include: [
+                    {
+                        model: models.subscription_plan, as: "subscription_plan"
+                    }
+                ]
+            });
+            let tOnj = {
+                username: "Test Sharma",
+                email: "deevanshukushwah80@gmail.com",
+                password: bcrypt.hashSync("Tenant@123456"),
+                subscription_plan: {
+                    plan_type: "FREETENANT",
+                    payment_id: "NA",
+                    payment_method: "NA",
+                },
+                address: "122 bhagirath colony dharnaka",
+                verification_status: false,
+                verified_email: true
+            }
+            let tenant = await models.tenant.create(tOnj, {
+                include: [
+                    {
+                        model: models.subscription_plan, as: "subscription_plan"
+                    }
+                ]
+            });
+        }
     } catch (error) {
         console.log(error);
     }

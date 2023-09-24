@@ -6,6 +6,7 @@ const _subscription_plan = require('./subscription_plans');
 const _room = require('./rooms');
 const _room_image = require('./room_images');
 const _document = require('./documents');
+const _admin = require('./admins');
 
 
 function initModels(sequelize) {
@@ -16,6 +17,7 @@ function initModels(sequelize) {
     let room = _room(sequelize, DataTypes);
     let room_image = _room_image(sequelize, DataTypes);
     let document = _document(sequelize, DataTypes);
+    let admin = _admin(sequelize, DataTypes);
 
     landlord.hasMany(property, { as: "properties" });
     property.belongsTo(landlord, {
@@ -65,7 +67,8 @@ function initModels(sequelize) {
         room,
         room_image,
         document,
-        tenant
+        tenant,
+        admin
     }
 }
 
