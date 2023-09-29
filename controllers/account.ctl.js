@@ -39,7 +39,7 @@ account.login = async (req, res) => {
                         profile_image: tenant.profile_image
                     }
                     // Add JWT-Token
-                    tenantData.jwtToken = jwt.sign(tenantData, process.env.SECRET);
+                    tenantData.jwtToken = jwt.sign(tenantData, process.env.SECRET, { expiresIn: process.env.TOKEN_EXP_TIME });
                     return res.status(Constant.SUCCESS_CODE).json({
                         code: Constant.SUCCESS_CODE,
                         message: Constant.USER_LOGIN_SUCCESS,
@@ -74,7 +74,7 @@ account.login = async (req, res) => {
                         profile_image: landlord.profile_image
                     }
                     // Add JWT-Token
-                    landlordData.jwtToken = jwt.sign(landlordData, process.env.SECRET);
+                    landlordData.jwtToken = jwt.sign(landlordData, process.env.SECRET, { expiresIn: process.env.TOKEN_EXP_TIME });
                     return res.status(Constant.SUCCESS_CODE).json({
                         code: Constant.SUCCESS_CODE,
                         message: Constant.USER_LOGIN_SUCCESS,
@@ -132,7 +132,7 @@ account.login = async (req, res) => {
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,
             data: error.message.message
-          })
+        })
     }
 }
 
