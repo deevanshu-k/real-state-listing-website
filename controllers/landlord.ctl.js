@@ -41,10 +41,11 @@ landlord.register = async (req, res) => {
             username,
             email,
             password,
-            subscription_plan: {
+            subscription_plans: {
                 plan_type: "FREELANDLORD",
                 payment_id: "NA",
                 payment_method: "NA",
+                status: true
             },
             address,
             verification_status: false,
@@ -52,7 +53,7 @@ landlord.register = async (req, res) => {
         }, {
             include: [
                 {
-                    model: db.subscription_plan, as: "subscription_plan"
+                    model: db.subscription_plan, as: "subscription_plans"
                 }
             ],
         });
@@ -79,6 +80,7 @@ landlord.register = async (req, res) => {
             }
         }
     } catch (error) {
+        console.log(error);
         // If Landlord Already Exist
         if (error.name == 'SequelizeUniqueConstraintError') {
             return res.status(Constant.BAD_REQUEST).json({

@@ -45,6 +45,7 @@ tenant.register = async (req, res) => {
                 plan_type: "FREETENANT",
                 payment_id: "NA",
                 payment_method: "NA",
+                status: true
             },
             address,
             verification_status: false,
@@ -52,7 +53,7 @@ tenant.register = async (req, res) => {
         }, {
             include: [
                 {
-                    model: db.subscription_plan, as: "subscription_plan"
+                    model: db.subscription_plan, as: "subscription_plans"
                 }
             ],
         });

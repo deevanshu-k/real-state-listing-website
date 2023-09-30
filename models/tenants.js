@@ -24,10 +24,6 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(255),
             allowNull: true,
         },
-        plan_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
         address: {
             type: DataTypes.STRING(255),
             allowNull: false

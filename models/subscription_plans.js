@@ -7,6 +7,14 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             primaryKey: true
         },
+        landlordId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
+        tenantId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+        },
         plan_type: {
             type: DataTypes.STRING(50),
             allowNull: false,
@@ -23,6 +31,10 @@ module.exports = function (sequelize, DataTypes) {
             type: "TIMESTAMP",
             defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),
             allowNull: false,
+        },
+        status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     },
         {

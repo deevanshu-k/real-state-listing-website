@@ -26,20 +26,21 @@ account.login = async (req, res) => {
                         email: email,
                         verified_email: true
                     },
-                    include: ['subscription_plan']
+                    include: ['subscription_plans']
                 });
                 if (tenant && bcrypt.compareSync(password, tenant.password)) {
                     // Tenant founded
+                    let sub_plan = tenant.subscription_plans.filter((d) => d.status == true);
                     let tenantData = {
                         id: tenant.id,
                         role: 'TENANT',
                         username: tenant.username,
                         email: tenant.email,
-                        subscription_plan: tenant.subscription_plan.plan_type,
+                        subscription_plan: sub_plan[0].plan_type,
                         profile_image: tenant.profile_image
                     }
                     // Add JWT-Token
-                    tenantData.jwtToken = jwt.sign(tenantData, process.env.SECRET);
+                    tenantData.jwtToken = jwt.sign(tenantData, process.env.SECRET, { expiresIn: process.env.TOKEN_EXP_TIME });
                     return res.status(Constant.SUCCESS_CODE).json({
                         code: Constant.SUCCESS_CODE,
                         message: Constant.USER_LOGIN_SUCCESS,
@@ -61,20 +62,21 @@ account.login = async (req, res) => {
                         email: email,
                         verified_email: true
                     },
-                    include: ['subscription_plan']
+                    include: ['subscription_plans']
                 });
                 if (landlord && bcrypt.compareSync(password, landlord.password)) {
                     // Landlord founded
+                    let sub_plan = landlord.subscription_plans.filter((d) => d.status == true);
                     let landlordData = {
                         id: landlord.id,
                         role: 'LANDLORD',
                         username: landlord.username,
                         email: landlord.email,
-                        subscription_plan: landlord.subscription_plan.plan_type,
+                        subscription_plan: sub_plan[0].plan_type,
                         profile_image: landlord.profile_image
                     }
                     // Add JWT-Token
-                    landlordData.jwtToken = jwt.sign(landlordData, process.env.SECRET);
+                    landlordData.jwtToken = jwt.sign(landlordData, process.env.SECRET, { expiresIn: process.env.TOKEN_EXP_TIME });
                     return res.status(Constant.SUCCESS_CODE).json({
                         code: Constant.SUCCESS_CODE,
                         message: Constant.USER_LOGIN_SUCCESS,
@@ -128,11 +130,12 @@ account.login = async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,
             data: error.message.message
-          })
+        })
     }
 }
 
