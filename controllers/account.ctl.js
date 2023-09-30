@@ -28,9 +28,9 @@ account.login = async (req, res) => {
                     },
                     include: ['subscription_plans']
                 });
-                let sub_plan = tenant.subscription_plans.filter((d) => d.status == true);
                 if (tenant && bcrypt.compareSync(password, tenant.password)) {
                     // Tenant founded
+                    let sub_plan = tenant.subscription_plans.filter((d) => d.status == true);
                     let tenantData = {
                         id: tenant.id,
                         role: 'TENANT',
@@ -64,9 +64,9 @@ account.login = async (req, res) => {
                     },
                     include: ['subscription_plans']
                 });
-                let sub_plan = landlord.subscription_plans.filter((d) => d.status == true);
                 if (landlord && bcrypt.compareSync(password, landlord.password)) {
                     // Landlord founded
+                    let sub_plan = landlord.subscription_plans.filter((d) => d.status == true);
                     let landlordData = {
                         id: landlord.id,
                         role: 'LANDLORD',
