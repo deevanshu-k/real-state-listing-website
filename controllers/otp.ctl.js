@@ -9,7 +9,7 @@ otp.verifyEmail = async (req,res) => {
     try {
         let {email, otp, user} = req.body;
         if((!email || !otp || !user) || !(user == 'TENANT' || user == 'LANDLORD')){
-            return res.status(Constant.SUCCESS_CODE).json({
+            return res.status(Constant.BAD_REQUEST).json({
                 code: Constant.BAD_REQUEST,
                 message: Constant.REQUEST_BAD_REQUEST
             });

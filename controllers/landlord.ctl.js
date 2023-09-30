@@ -23,7 +23,7 @@ landlord.register = async (req, res) => {
         let landlordData = await db.landlord.findOne({ where: { email: email, verified_email: false } });
         if (landlordData) {
             // Send Email For Otp
-            let otp = otpHelper.createOtpAndCacheOtp(email, 8);
+            let otp = otpHelper.createOtpAndCacheOtp(email, 4);
             await mail.sendEmailVerificationOtpEmail({ email, username: landlordData.username, otp });
             // Redirect to email verification
             return res.status(Constant.SUCCESS_CODE).json({
@@ -41,12 +41,12 @@ landlord.register = async (req, res) => {
             username,
             email,
             password,
-            subscription_plans: {
+            subscription_plans: [{
                 plan_type: "FREELANDLORD",
                 payment_id: "NA",
                 payment_method: "NA",
                 status: true
-            },
+            }],
             address,
             verification_status: false,
             verified_email: false
@@ -61,7 +61,7 @@ landlord.register = async (req, res) => {
         // Check For Landlord Created
         if (landlordData) {
             // Send Email For Otp
-            let otp = otpHelper.createOtpAndCacheOtp(email, 8);
+            let otp = otpHelper.createOtpAndCacheOtp(email, 4);
             await mail.sendEmailVerificationOtpEmail({ email, username: landlordData.username, otp });
             // Redirect to email verification
             return res.status(Constant.SUCCESS_CODE).json({
