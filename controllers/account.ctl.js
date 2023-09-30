@@ -26,8 +26,9 @@ account.login = async (req, res) => {
                         email: email,
                         verified_email: true
                     },
-                    include: ['subscription_plan']
+                    include: ['subscription_plans']
                 });
+                let sub_plan = tenant.subscription_plans.filter((d) => d.status == true);
                 if (tenant && bcrypt.compareSync(password, tenant.password)) {
                     // Tenant founded
                     let tenantData = {
@@ -35,7 +36,7 @@ account.login = async (req, res) => {
                         role: 'TENANT',
                         username: tenant.username,
                         email: tenant.email,
-                        subscription_plan: tenant.subscription_plan.plan_type,
+                        subscription_plan: sub_plan[0].plan_type,
                         profile_image: tenant.profile_image
                     }
                     // Add JWT-Token
@@ -61,8 +62,9 @@ account.login = async (req, res) => {
                         email: email,
                         verified_email: true
                     },
-                    include: ['subscription_plan']
+                    include: ['subscription_plans']
                 });
+                let sub_plan = landlord.subscription_plans.filter((d) => d.status == true);
                 if (landlord && bcrypt.compareSync(password, landlord.password)) {
                     // Landlord founded
                     let landlordData = {
@@ -70,7 +72,7 @@ account.login = async (req, res) => {
                         role: 'LANDLORD',
                         username: landlord.username,
                         email: landlord.email,
-                        subscription_plan: landlord.subscription_plan.plan_type,
+                        subscription_plan: sub_plan[0].plan_type,
                         profile_image: landlord.profile_image
                     }
                     // Add JWT-Token
@@ -128,6 +130,7 @@ account.login = async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,

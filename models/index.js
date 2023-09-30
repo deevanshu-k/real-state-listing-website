@@ -38,10 +38,11 @@ models.Sequelize = Sequelize;
                 username: "Test Yadav",
                 email: "astroboiscosmos@gmail.com",
                 password: bcrypt.hashSync("Landlord@123456"),
-                subscription_plan: {
+                subscription_plans: {
                     plan_type: "FREELANDLORD",
                     payment_id: "NA",
                     payment_method: "NA",
+                    status: true
                 },
                 address: "122 bhagirath colony dharnaka",
                 verification_status: false,
@@ -50,7 +51,7 @@ models.Sequelize = Sequelize;
             let landlord = await models.landlord.create(lOnj, {
                 include: [
                     {
-                        model: models.subscription_plan, as: "subscription_plan"
+                        model: models.subscription_plan, as: "subscription_plans"
                     }
                 ]
             });
@@ -58,10 +59,11 @@ models.Sequelize = Sequelize;
                 username: "Test Sharma",
                 email: "deevanshukushwah80@gmail.com",
                 password: bcrypt.hashSync("Tenant@123456"),
-                subscription_plan: {
+                subscription_plans: {
                     plan_type: "FREETENANT",
                     payment_id: "NA",
                     payment_method: "NA",
+                    status: true
                 },
                 address: "122 bhagirath colony dharnaka",
                 verification_status: false,
@@ -70,7 +72,7 @@ models.Sequelize = Sequelize;
             let tenant = await models.tenant.create(tOnj, {
                 include: [
                     {
-                        model: models.subscription_plan, as: "subscription_plan"
+                        model: models.subscription_plan, as: "subscription_plans"
                     }
                 ]
             });

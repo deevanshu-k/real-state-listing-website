@@ -19,12 +19,14 @@ function initModels(sequelize) {
     let document = _document(sequelize, DataTypes);
     let admin = _admin(sequelize, DataTypes);
 
+    // PROPERTIES
     landlord.hasMany(property, { as: "properties" });
     property.belongsTo(landlord, {
         foreignKey: "landlordId",
         as: "landlord",
     });
 
+    // DOCUMENTS
     landlord.hasMany(document, { as: 'documents' });
     document.belongsTo(landlord, {
         foreignKey: "landlordId",
@@ -37,23 +39,27 @@ function initModels(sequelize) {
         as: "tenant"
     });
 
-    subscription_plan.hasOne(landlord, { as: "landlord" });
-    subscription_plan.hasOne(tenant, { as: "tenant" });
-    landlord.belongsTo(subscription_plan, {
-        foreignKey: "plan_id",
-        as: "subscription_plan"
-    });
-    tenant.belongsTo(subscription_plan, {
-        foreignKey: "plan_id",
-        as: "subscription_plan"
+    // SUBSCRIPTION PLANS
+    tenant.hasMany(subscription_plan, { as: 'subscription_plans' });
+    subscription_plan.belongsTo(tenant, {
+        foreignKey: "tenantId",
+        as: "tenant"
     });
 
+    landlord.hasMany(subscription_plan, { as: 'subscription_plans' });
+    subscription_plan.belongsTo(landlord, {
+        foreignKey: "landlordId",
+        as: "landlord"
+    });
+
+    // ROOMS
     property.hasMany(room, { as: "rooms" });
     room.belongsTo(property, {
         foreignKey: "propertyId",
         as: "property"
     });
 
+    // ROOM IMAGES
     room.hasMany(room_image, { as: "images" });
     room_image.belongsTo(room, {
         foreignKey: "roomId",
