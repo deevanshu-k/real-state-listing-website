@@ -128,6 +128,13 @@ payment.orderPaidWebhook = async (req, res) => {
             // we can store detail in db and send the response
             if (req.body.payload.order.entity) {
                 // New Payment Is Done
+                if(orderEntity.notes.userType == 'LANDLORD'){
+                    await db.subscription_plan.update({status:false},{where: { landlordId: orderEntity.notes.userId }});
+                }
+                else {
+                    await db.subscription_plan.update({status:false},{where: { tenantId: orderEntity.notes.userId }});
+                }
+                
                 db.subscription_plan.update(
                     { payment_id: paymentEntity.id, payment_method: paymentEntity.method, status: true },
                     {
