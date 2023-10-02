@@ -116,7 +116,7 @@ payment.createOrder = async (req, res) => {
 payment.orderPaidWebhook = async (req, res) => {
     try {
         // do a validation
-        const data = crypto.createHmac('sha256', "process.env.razorpay_key_secret");
+        const data = crypto.createHmac('sha256', process.env.razorpay_webhook_secret);
         data.update(JSON.stringify(req.body));
         const digest = data.digest('hex');
         if (digest === req.headers['x-razorpay-signature']) {
