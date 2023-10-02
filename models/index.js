@@ -41,6 +41,7 @@ models.Sequelize = Sequelize;
                 subscription_plans: {
                     plan_type: "FREELANDLORD",
                     payment_id: "NA",
+                    order_id: "NA",
                     payment_method: "NA",
                     status: true
                 },
@@ -62,6 +63,7 @@ models.Sequelize = Sequelize;
                 subscription_plans: {
                     plan_type: "FREETENANT",
                     payment_id: "NA",
+                    order_id: "NA",
                     payment_method: "NA",
                     status: true
                 },

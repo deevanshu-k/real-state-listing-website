@@ -44,6 +44,7 @@ tenant.register = async (req, res) => {
             subscription_plans: [{
                 plan_type: "FREETENANT",
                 payment_id: "NA",
+                order_id: "NA",
                 payment_method: "NA",
                 status: true
             }],
