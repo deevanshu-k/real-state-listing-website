@@ -23,9 +23,17 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
+        order_id: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+        },
         payment_method: {
             type: DataTypes.STRING(255),
             allowNull: true
+        },
+        exp_date: {
+            type: "TIMESTAMP",
+            allowNull: true,
         },
         sub_date: {
             type: "TIMESTAMP",

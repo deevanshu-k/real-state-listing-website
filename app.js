@@ -12,15 +12,26 @@ const chalk = require('chalk');
 
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(cors());
+
+// CORS + BODY_PARSE
+const corsOptions = {
+    origin: [process.env.CLIENT_URL],
+    optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 // Set Static Folder
 let dir = path.join(__dirname, '/public/images');
 app.use('/images', express.static(dir));
 
+app.use((req,res,next) => {
+    setTimeout(() => {next()},2000);
+})
+
 // user route file
 app.use("/api/register",require("./routes/register"));
 app.use("/api/login",require("./routes/login"));
+app.use("/api/payment",require("./routes/payment"));
 
 // Handling non matching request from the client
 app.use((req, res, next) => {
