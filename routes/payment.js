@@ -1,8 +1,9 @@
 const express = require("express");
-const payment = require("../controllers/payment.ctl");
 const router = express.Router();
+const payment = require("../controllers/payment.ctl");
+const authMiddleware = require("../middileware/auth");
 
-router.post("/order",payment.createOrder);
-router.post('/paymentCapture', payment.orderPaidWebhook)
+router.post("/order", authMiddleware.checkAuthentication, payment.createOrder);
+router.post('/paymentCapture', payment.orderPaidWebhook);
 
 module.exports = router;
