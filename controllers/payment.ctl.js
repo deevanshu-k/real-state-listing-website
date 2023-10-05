@@ -24,7 +24,9 @@ let plans = {
 
 payment.createOrder = async (req, res) => {
     try {
-        let { userType, userId, planType } = req.body;
+        let { planType } = req.body;
+        let userId = req.user.id;
+        let userType = req.user.role;
         let planData = plans[planType];
         if ((userType == "LANDLORD" || userType == "TENANT") && userId && planData) {
             const options = {

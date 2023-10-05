@@ -20,6 +20,7 @@ module.exports = {
     SAVE_SUCCESS: 'Requested record created successfully',
     VERIFY_EMAIL: 'Verify your email',
     VERIFIED_SUCCESSFULLY: 'Email verified successfully',
-
+    USER_TOKEN_EXPIRED: 'Your section is expired, Login again',
+    USER_TOKEN_NOTFOUND: 'You are not logged in, Login now',
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!'
 }
