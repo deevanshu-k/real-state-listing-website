@@ -10,7 +10,7 @@ module.exports = {
     CONFLICT: 409,
     SERVER_ERROR: 500,
 
-    SOMETHING_WENT_WRONG: 'Something went wrong',
+    SOMETHING_WENT_WRONG: 'Something went wrong, try after some time!',
     REQUEST_BAD_REQUEST: "Bad request!",
     REQUEST_SERVER_ERROR: "Server error!",
     REQUEST_NOT_FOUND: "Route not found!",
@@ -22,5 +22,6 @@ module.exports = {
     VERIFIED_SUCCESSFULLY: 'Email verified successfully',
     USER_TOKEN_EXPIRED: 'Your section is expired, Login again',
     USER_TOKEN_NOTFOUND: 'You are not logged in, Login now',
-    LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!'
+    LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
+    UNAUTHORIZED_REQUEST: 'Unauthorized request !'
 }

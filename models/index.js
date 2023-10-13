@@ -2,6 +2,7 @@ const dbConfig = require("../config/db.config");
 const bcrypt = require('bcryptjs');
 let Sequelize = require("sequelize");
 let initModels = require("./init-models").initModels;
+let jwt = require("jsonwebtoken");
 
 // create sequelize instance with database connection
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
@@ -28,6 +29,8 @@ models.Sequelize = Sequelize;
     try {
         await models.sequelize.sync({ force: true });
         if (process.env.NODE_ENV == 'development') {
+            let devValues = [];
+
             let aOnj = {
                 username: "Test Dubey",
                 email: "deevanshukushwah80@gmail.com",
@@ -56,6 +59,21 @@ models.Sequelize = Sequelize;
                     }
                 ]
             });
+
+            let landlordData = {
+                id: landlord.id,
+                role: 'LANDLORD',
+                username: landlord.username,
+                email: landlord.email,
+                subscription_plan: landlord.subscription_plans[0].plan_type,
+                profile_image: landlord.profile_image
+            }
+            landlordToken = jwt.sign(landlordData, process.env.SECRET, { expiresIn: '24h' });
+            devValues.push({
+                user: "LANDLORD",
+                token: landlordToken
+            });
+
             let tOnj = {
                 username: "Test Sharma",
                 email: "deevanshukushwah80@gmail.com",
@@ -78,6 +96,29 @@ models.Sequelize = Sequelize;
                     }
                 ]
             });
+
+            let tenantData = {
+                id: tenant.id,
+                role: 'TENANT',
+                username: tenant.username,
+                email: tenant.email,
+                subscription_plan: tenant.subscription_plans[0].plan_type,
+                profile_image: tenant.profile_image
+            }
+
+            tenantToken = jwt.sign(tenantData, process.env.SECRET, { expiresIn: '24h' });
+            devValues.push({
+                user: "TENANT",
+                token: tenantToken
+            });
+
+            // Dev Tokens For Api Testing
+            if (devValues.length) console.log("\n---------------------------Dev-Tokens : Use This Token For Dev Testing--------------------------->");
+            devValues.forEach(d => {
+                console.log(d.user + " : " + d.token);
+                if(d != devValues[devValues.length-1]) console.log("\n");
+            })
+            if (devValues.length) console.log("---------------------------------------------------------------------------------------------------->\n");
         }
     } catch (error) {
         console.log(error);
