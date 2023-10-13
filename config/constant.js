@@ -23,5 +23,23 @@ module.exports = {
     USER_TOKEN_EXPIRED: 'Your section is expired, Login again',
     USER_TOKEN_NOTFOUND: 'You are not logged in, Login now',
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
-    UNAUTHORIZED_REQUEST: 'Unauthorized request !'
+    UNAUTHORIZED_REQUEST: 'Unauthorized request !',
+
+    PLANS: {
+        "PREMIUMTENANT": {
+            type: "PREMIUMTENANT",
+            amount: 599
+        },
+        "STANDARDLANDLORD": {
+            type: "STANDARDLANDLORD",
+            amount: 799,
+            duration: 90
+        },
+        "PREMIUMLANDLORD": {
+            type: "PREMIUMLANDLORD",
+            amount: 1499,
+            duration: 180
+        }
+    },
+    PROPERTY_TYPE: ['ROOM', 'FLAT', 'COMMERTIAL_SPACE']
 }
