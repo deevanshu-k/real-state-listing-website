@@ -77,11 +77,8 @@ payment.createOrder = async (req, res) => {
                             key: process.env.razorpay_key_id,
                             id: response.id,
                             amount: response.amount,
-                            currency: "INR",
-                            notes: {
-                                userId: 1,
-                                userType: "TENANT"
-                            }
+                            currency: response.currency,
+                            notes: response.notes
                         }
                     });
                 }
