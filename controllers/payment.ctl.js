@@ -5,22 +5,7 @@ const crypto = require('crypto');
 const db = require("../models");
 
 let payment = {};
-let plans = {
-    "PREMIUMTENANT": {
-        type: "PREMIUMTENANT",
-        amount: 599
-    },
-    "STANDARDLANDLORD": {
-        type: "STANDARDLANDLORD",
-        amount: 799,
-        duration: 90
-    },
-    "PREMIUMLANDLORD": {
-        type: "PREMIUMLANDLORD",
-        amount: 1499,
-        duration: 180
-    }
-};
+let plans = Constant.PLANS;
 
 payment.createOrder = async (req, res) => {
     try {
