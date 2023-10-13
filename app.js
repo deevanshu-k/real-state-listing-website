@@ -32,6 +32,7 @@ app.use((req,res,next) => {
 app.use("/api/register",require("./routes/register"));
 app.use("/api/login",require("./routes/login"));
 app.use("/api/payment",require("./routes/payment"));
+app.use("/api/property",require("./routes/property"));
 
 // Handling non matching request from the client
 app.use((req, res, next) => {

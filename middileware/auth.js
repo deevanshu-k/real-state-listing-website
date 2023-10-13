@@ -5,6 +5,16 @@ let auth = {};
 
 /*
     Only For Checking If Token Is Valid Or Not
+    set req.user = req.user {
+        id: number,
+        role: "TENANT" | "LANDLORD",
+        username: string,
+        email: string,
+        subscription_plan: "FREETENANT"| "PREMIUMTENANT"  | "FREELANDLORD" | "STANDARDLANDLORD" | "PREMIUMLANDLORD",
+        profile_image: string | null,
+        iat: number,
+        exp: number
+    }
 */
 auth.checkAuthentication = async (req, res, next) => {
     try {
