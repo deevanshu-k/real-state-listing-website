@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 /*
- property_type: [ROOM,FLAT,COMMERTIAL_SPACE]
+ property_type: [HOUSE,ROOM,FLAT,COMMERTIAL_SPACE]
 */
 module.exports = function (sequelize, DataTypes) {
     return sequelize.define('property', {

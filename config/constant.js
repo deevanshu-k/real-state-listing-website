@@ -30,16 +30,24 @@ module.exports = {
             type: "PREMIUMTENANT",
             amount: 599
         },
+        "FREELANDLORD": {
+            type: "FREELANDLORD",
+            amount: 0,
+            duration: 7,
+            room: 1
+        },
         "STANDARDLANDLORD": {
             type: "STANDARDLANDLORD",
             amount: 799,
-            duration: 90
+            duration: 90,
+            room: 5
         },
         "PREMIUMLANDLORD": {
             type: "PREMIUMLANDLORD",
             amount: 1499,
-            duration: 180
+            duration: 180,
+            room: Number.POSITIVE_INFINITY
         }
     },
-    PROPERTY_TYPE: ['ROOM', 'FLAT', 'COMMERTIAL_SPACE']
+    PROPERTY_TYPE: ['ROOM','HOME', 'FLAT', 'COMMERTIAL_SPACE']
 }
