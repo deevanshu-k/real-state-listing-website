@@ -24,6 +24,7 @@ module.exports = {
     USER_TOKEN_NOTFOUND: 'You are not logged in, Login now',
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
+    SUBSCRIPTION_PLAN_LIMIT_REACHED: "You've reached your subscription plan's usage limit. Consider upgrading for more access.",
 
     PLANS: {
         "PREMIUMTENANT": {
@@ -34,20 +35,20 @@ module.exports = {
             type: "FREELANDLORD",
             amount: 0,
             duration: 7,
-            room: 1
+            no_of_property: 1
         },
         "STANDARDLANDLORD": {
             type: "STANDARDLANDLORD",
             amount: 799,
             duration: 90,
-            room: 5
+            no_of_property: 5
         },
         "PREMIUMLANDLORD": {
             type: "PREMIUMLANDLORD",
             amount: 1499,
             duration: 180,
-            room: Number.POSITIVE_INFINITY
+            no_of_property: Number.POSITIVE_INFINITY
         }
     },
-    PROPERTY_TYPE: ['ROOM','HOME', 'FLAT', 'COMMERTIAL_SPACE']
+    PROPERTY_TYPE: ['ROOM', 'HOME', 'FLAT', 'COMMERTIAL_SPACE', 'SHOP']
 }
