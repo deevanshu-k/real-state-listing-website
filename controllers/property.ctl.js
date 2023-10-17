@@ -54,7 +54,7 @@ property.createProperty = async (req, res) => {
         }
 
         // Create Property Set  verification_status:false,rating:0 
-        const newProperty = await db.property.create({
+        await db.property.create({
             landlordId: req.user.id,
             property_type,
             property_name,
@@ -72,19 +72,11 @@ property.createProperty = async (req, res) => {
             rating: 0,
         })
 
-        //Check for property successfully created
-        if (newProperty) {
-            return res.status(Constant.SUCCESS_CODE).json({
-                code: Constant.SUCCESS_CODE,
-                message: Constant.SAVE_SUCCESS,
-            });
-        }
-        else {
-            throw {
-                code: Constant.SERVER_ERROR,
-                message: Constant.REQUEST_SERVER_ERROR
-            }
-        }
+        //If property successfully created
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.SAVE_SUCCESS,
+        });
     } catch (error) {
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
