@@ -50,5 +50,5 @@ module.exports = {
             no_of_property: Number.POSITIVE_INFINITY
         }
     },
-    PROPERTY_TYPE: ['ROOM','HOME', 'FLAT', 'COMMERTIAL_SPACE']
+    PROPERTY_TYPE: ['ROOM', 'HOME', 'FLAT', 'COMMERTIAL_SPACE', 'SHOP']
 }
