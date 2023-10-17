@@ -25,6 +25,7 @@ module.exports = {
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
     SUBSCRIPTION_PLAN_LIMIT_REACHED: "You've reached your subscription plan's usage limit. Consider upgrading for more access.",
+    PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
 
     PLANS: {
         "PREMIUMTENANT": {

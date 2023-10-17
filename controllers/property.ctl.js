@@ -22,8 +22,31 @@ let property = {};
 
 
 property.getAllProperties = async (req,res) => {
-    // Return all properties of landlord ID (req.user.id) provided
-    return res.send("OK");
+    try {
+        // Return all properties of landlord ID (req.user.id) provided
+        const allProperties = await db.property.findAll({ where: { landlordId: req.user.id } });
+
+        // if no properties were found for this landlord
+        if(allProperties.length===0){
+            return res.status(Constant.NOT_FOUND).json({
+                code: Constant.NOT_FOUND,
+                message: Constant.PROPERTIES_NOT_FOUND
+            });
+        }
+
+        // Return success response with the found properties
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            data: allProperties
+        });
+
+       
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 property.createProperty = async (req, res) => {
