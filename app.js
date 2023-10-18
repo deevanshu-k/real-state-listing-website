@@ -24,15 +24,12 @@ app.use(cors(corsOptions));
 let dir = path.join(__dirname, '/public/images');
 app.use('/images', express.static(dir));
 
-app.use((req,res,next) => {
-    setTimeout(() => {next()},2000);
-})
-
 // user route file
-app.use("/api/register",require("./routes/register"));
-app.use("/api/login",require("./routes/login"));
-app.use("/api/payment",require("./routes/payment"));
-app.use("/api/property",require("./routes/property"));
+app.use("/api/register", require("./routes/register"));
+app.use("/api/login", require("./routes/login"));
+app.use("/api/payment", require("./routes/payment"));
+app.use("/api/property", require("./routes/property"));
+app.use("/api/upload", require("./routes/upload"));
 
 // Handling non matching request from the client
 app.use((req, res, next) => {
@@ -62,11 +59,11 @@ httpServer.listen(config.PORT, () => {
 
 // Cron-Jobs
 
-schedule.scheduleJob('*/10 * * * *',async () => {
+schedule.scheduleJob('*/10 * * * *', async () => {
     console.log(chalk.red("\n\n\n--------------------------Job Running!--------------------------------"));
     console.log(chalk.redBright("Job Description : Remove un-verified email landlord and tenant"));
-    let destroyedLandlord = await db.landlord.destroy({where:{verified_email:false}});
-    let destroyedTenant = await db.tenant.destroy({where:{verified_email:false}});
+    let destroyedLandlord = await db.landlord.destroy({ where: { verified_email: false } });
+    let destroyedTenant = await db.tenant.destroy({ where: { verified_email: false } });
     console.log(chalk.blueBright("No of landlord destroyed: " + destroyedLandlord));
     console.log(chalk.blueBright("No of tenant destroyed: " + destroyedTenant));
     console.log(chalk.red("----------------------------Job Done----------------------------------"));
