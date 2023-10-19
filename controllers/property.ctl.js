@@ -109,19 +109,17 @@ property.createProperty = async (req, res) => {
 }
 
 property.updateProperty = async (req, res) => {
-    // NOTE: propertyId ,rating is cannot be updated
-    // req.body = { propertyId:number , data: { data to be updated }}
-    const { propertyId, data } = req.body;
-
-    if (!propertyId || !data) {
-        return res.status(Constant.BAD_REQUEST).json({
-            code: Constant.BAD_REQUEST,
-            message: Constant.REQUEST_BAD_REQUEST
-        });
-    }
-
-
     try {
+        // NOTE: propertyId ,rating is cannot be updated
+        // req.body = { propertyId:number , data: { data to be updated }}
+        const { propertyId, data } = req.body;
+
+        if (!propertyId || !data) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST
+            });
+        }
         // Finding the property by it's id
         const property = await db.property.findOne({ where: { id: propertyId } });
 
