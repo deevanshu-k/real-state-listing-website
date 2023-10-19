@@ -14,6 +14,10 @@ module.exports = function (sequelize, DataTypes) {
         img_url: {
             type: DataTypes.STRING(255),
             allowNull: false
+        },
+        key: {
+            type: DataTypes.STRING(255),
+            allowNull: false
         }
     },
         {
