@@ -29,6 +29,11 @@ module.exports = {
     UPDATE_SUCCESS: 'Requested record updated successfully',
     PROPERTY_NOT_FOUND: 'Property not found!',
 
+    // Profile Image Uploads
+    PROFILEIMAGE_UPDATED: "Profile Image Updated !",
+    INVALID_IMAGE_TYPE: "Invalid Image Type !",
+    NO_IMAGE_SELECTED: "No Image Selected !",
+
     PLANS: {
         "PREMIUMTENANT": {
             type: "PREMIUMTENANT",
