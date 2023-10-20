@@ -25,11 +25,20 @@ module.exports = {
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
     SUBSCRIPTION_PLAN_LIMIT_REACHED: "You've reached your subscription plan's usage limit. Consider upgrading for more access.",
-    
+
     // Profile Image Uploads
     PROFILEIMAGE_UPDATED: "Profile Image Updated !",
     INVALID_IMAGE_TYPE: "Invalid Image Type !",
     NO_IMAGE_SELECTED: "No Image Selected !",
+
+    // Docs Uploads
+    DOCUMENT_UPDATED: "Document Updated !",
+    INVALID_DOCUMENT_TYPE: "Invalid Document Type !",
+    NO_DOCUMENT_SELECTED: "No Document Selected !",
+    DOCS: {
+        TENANT: ['aadhar'],
+        LANDLORD: ['aadhar', 'ebill']
+    },
 
     PLANS: {
         "PREMIUMTENANT": {
