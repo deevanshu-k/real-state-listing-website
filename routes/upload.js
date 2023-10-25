@@ -7,6 +7,6 @@ const rateLimiter = require("../middileware/rate-limit");
 
 router.post("/profileimage", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, uploadCtl.uploadProfile);
 router.post('/document/:type', rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, uploadCtl.uploadDocument);
-router.post('/roomImages', rateLimiter.landlordOperationsRouteRateLimiter,auth.checkAuthentication, user.landlord, uploadCtl.uploadDocument);
+router.post('/propertyImages', rateLimiter.landlordOperationsRouteRateLimiter,auth.checkAuthentication, user.landlord, uploadCtl.uploadPropertyImage);
 
 module.exports = router;

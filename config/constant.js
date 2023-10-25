@@ -25,10 +25,13 @@ module.exports = {
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
     SUBSCRIPTION_PLAN_LIMIT_REACHED: "You've reached your subscription plan's usage limit. Consider upgrading for more access.",
+
+    // Property
+    PROPERTY_UNAUTH_ACCESS: "Property Not Belong To You !",
     PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
     UPDATE_SUCCESS: 'Requested record updated successfully',
     PROPERTY_NOT_FOUND: 'Property not found!',
-  
+
     // Profile Image Uploads
     PROFILEIMAGE_UPDATED: "Profile Image Updated !",
     INVALID_IMAGE_TYPE: "Invalid Image Type !",
@@ -42,6 +45,12 @@ module.exports = {
         TENANT: ['aadhar'],
         LANDLORD: ['aadhar', 'ebill']
     },
+
+    // PROPERTY Image Uploads
+    PROPERTY_IMAGEADDED: "Image Added !",
+    NO_OF_IMAGES_PER_PROPERTY:5,
+    PROPERTY_ADDIMAGE_LIMIT_EXCEED:"Property Images Limit Exceed !",
+    NO_PROPERTY_IMAGE_SELECTED: "No Image Selected !",
 
     PLANS: {
         "PREMIUMTENANT": {

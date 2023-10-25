@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const {PROPERTY_TYPE} = require('../config/constant.js');
+const {PROPERTY_TYPE, NO_OF_IMAGES_PER_PROPERTY} = require('../config/constant.js');
 var validation = {};
 
 validation.userLogin = async (data) => {
@@ -32,6 +32,19 @@ validation.propertyCreation = async (data) => {
         attached_bathroom: Joi.boolean().required(),
         include_water_price: Joi.boolean().required(),
         include_electricity_price: Joi.boolean().required(),
+    });
+    try {
+        const value = await schema.validateAsync(data);
+        return value;
+    } catch (err) {
+        return err;
+    }
+};
+
+validation.uploadPropertyImage = async (data) => {
+    const schema = Joi.object({
+        propertyId: Joi.number().required(),
+        imageNo: Joi.number().min(1).max(NO_OF_IMAGES_PER_PROPERTY).required()
     });
     try {
         const value = await schema.validateAsync(data);
