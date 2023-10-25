@@ -3,8 +3,10 @@ const Constant = require('../config/constant');
 const db = require('../models');
 const upload = require('../helpers/upload');
 const multer = require('multer');
+const validation = require('../helpers/validation');
 let up = util.promisify(upload.uploadProfileImage.single('file'));
 let ud = util.promisify(upload.uploadDocument.single('file'));
+let ur = util.promisify(upload.uploadPropertyImage.single('file'));
 
 let uploads = {};
 
@@ -115,13 +117,13 @@ uploads.uploadDocument = async (req, res) => {
             // If Tenant
             docData.tenantId = req.user.id;
             // Save/Update Document
-            await updateOrCreateDocument(db.document, { tenantId: req.user.id, type: req.params.type }, docData);
+            await updateOrCreateData(db.document, { tenantId: req.user.id, type: req.params.type }, docData);
         }
         else if (req.user.role === 'LANDLORD') {
             // If Landlord
             docData.landlordId = req.user.id;
             // Save/Update Document
-            await updateOrCreateDocument(db.document, { landlordId: req.user.id, type: req.params.type }, docData);
+            await updateOrCreateData(db.document, { landlordId: req.user.id, type: req.params.type }, docData);
         }
 
 
@@ -154,8 +156,84 @@ uploads.uploadDocument = async (req, res) => {
     }
 }
 
+uploads.uploadPropertyImage = async (req, res) => {
+    try {
+        // Check MetaData Required
+        let { propertyId, imageNo } = req.query;
+        let data = await validation.uploadPropertyImage({ propertyId, imageNo });
+        if (data.message) {
+            // Wrong Data
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: data.message
+            });
+        }
+        // Check If this Property Belong To Requested Landlord
+        let property = await db.property.findOne({
+            where: {
+                id: propertyId,
+                landlordId: req.user.id
+            }
+        });
+        if (!property) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.PROPERTY_UNAUTH_ACCESS
+            });
+        }
+        // Upload To S3
+        await ur(req, res);
+        if (!req.file) {
+            // If File Not Present
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.NO_PROPERTY_IMAGE_SELECTED
+            });
+        }
+        // Save To DB
+        let imgData = {
+            propertyId: propertyId,
+            img_url: req.file.location,
+            key: req.file.key
+        };
+        const foundItem = await db.property_image.findOne({ where: { propertyId: imgData.propertyId, key: imgData.key } });
+        if(!foundItem){
+            await db.property_image.create(imgData);
+        }
 
-async function updateOrCreateDocument(model, where, newItem) {
+        // Return SUCCESS
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.PROPERTY_IMAGEADDED,
+            data: {
+                url: imgData.img_url
+            }
+        });
+
+    } catch (error) {
+        console.log(error);
+        if (error instanceof multer.MulterError) {
+            let obj = upload.multerErrorHandler(error);
+            return res.status(obj.code).json({
+                code: obj.code,
+                message: obj.message
+            });
+        }
+        if (error.by == 'multer') {
+            return res.status(error.code || Constant.SERVER_ERROR).json({
+                code: error.code || Constant.SERVER_ERROR,
+                message: error.message || Constant.SOMETHING_WENT_WRONG
+            });
+        }
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        });
+    }
+}
+
+
+async function updateOrCreateData(model, where, newItem) {
     // First try to find the record
     const foundItem = await model.findOne({ where });
     if (!foundItem) {
