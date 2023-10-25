@@ -15,9 +15,17 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
+        type: {
+            type: DataTypes.STRING(255),
+            allowNull: false,
+        },
         document_url: {
             type: DataTypes.STRING(255),
             allowNull: false,
+        },
+        key: {
+            type: DataTypes.STRING(255),
+            allowNull: false
         }
     },
         {

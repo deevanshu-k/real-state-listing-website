@@ -28,11 +28,20 @@ module.exports = {
     PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
     UPDATE_SUCCESS: 'Requested record updated successfully',
     PROPERTY_NOT_FOUND: 'Property not found!',
-
+  
     // Profile Image Uploads
     PROFILEIMAGE_UPDATED: "Profile Image Updated !",
     INVALID_IMAGE_TYPE: "Invalid Image Type !",
     NO_IMAGE_SELECTED: "No Image Selected !",
+
+    // Docs Uploads
+    DOCUMENT_UPDATED: "Document Updated !",
+    INVALID_DOCUMENT_TYPE: "Invalid Document Type !",
+    NO_DOCUMENT_SELECTED: "No Document Selected !",
+    DOCS: {
+        TENANT: ['aadhar'],
+        LANDLORD: ['aadhar', 'ebill']
+    },
 
     PLANS: {
         "PREMIUMTENANT": {
