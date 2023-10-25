@@ -61,6 +61,30 @@ upload.uploadDocument = multer({
     }
 });
 
+upload.uploadPropertyImage = multer({
+    limits: { fileSize: 5 * 1024 * 1024 },
+    storage: multerS3({
+        s3,
+        acl: 'public-read',
+        bucket: process.env.aws_bucket_name,
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+        key: (req, file, cb) => {
+            const fileName = `property_${req.query.propertyId}_${req.query.imageNo}`;
+            cb(null, fileName);
+        }
+    }),
+    fileFilter: function (req, file, cb) {
+        const fileRegex = new RegExp('\.(jpg|jpeg|png)$');
+        const fileMime = file.mimetype;
+        if (!fileMime.match(fileRegex)) {
+            //throw exception
+            return cb({ code: Constant.BAD_REQUEST, message: Constant.INVALID_IMAGE_TYPE, by: "multer" });
+        }
+        //pass the file
+        cb(null, true);
+    }
+});
+
 upload.multerErrorHandler = (err) => {
     // PENDING: Other Type Of Multer Error
     // https://github.com/expressjs/multer/blob/master/lib/multer-error.js
