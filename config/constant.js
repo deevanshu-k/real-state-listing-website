@@ -28,6 +28,9 @@ module.exports = {
 
     // Property
     PROPERTY_UNAUTH_ACCESS: "Property Not Belong To You !",
+    PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
+    UPDATE_SUCCESS: 'Requested record updated successfully',
+    PROPERTY_NOT_FOUND: 'Property not found!',
 
     // Profile Image Uploads
     PROFILEIMAGE_UPDATED: "Profile Image Updated !",
