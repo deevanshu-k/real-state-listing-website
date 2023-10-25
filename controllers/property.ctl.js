@@ -21,9 +21,54 @@ let property = {};
 */
 
 
-property.getAllProperties = async (req,res) => {
-    // Return all properties of landlord ID (req.user.id) provided
-    return res.send("OK");
+property.getAllProperties = async (req, res) => {
+    try {
+        // Return all properties of landlord ID (req.user.id) provided
+        const allProperties = await db.property.findAll({ where: { landlordId: req.user.id }, include: ['images'] });
+
+        //Check for if there's any property for this landlord, then returns the properties
+        if (allProperties.length > 0) {
+            const properties = allProperties.map(property => ({
+                id: property.id,
+                property_type: property.property_type,
+                property_name: property.property_name,
+                verification_status: property.verification_status,
+                state: property.state,
+                district: property.district,
+                zipcode: property.zipcode,
+                remark: property.remark,
+                no_of_rooms: property.no_of_rooms,
+                price: property.price,
+                attached_kitchen: property.attached_kitchen,
+                attached_bathroom: property.attached_bathroom,
+                include_water_price: property.include_water_price,
+                include_electricity_price: property.include_electricity_price,
+                rating: property.rating,
+                images: property.images.map(image => ({
+                    id: image.id,
+                    img_url: image.img_url
+                })) // "images" is an array of  [{ id, img_url }]
+            }));
+
+            // Return success response with the found properties
+            return res.status(Constant.SUCCESS_CODE).json({
+                code: Constant.SUCCESS_CODE,
+                data: properties
+            });
+        } else {
+            // if no properties were found for this landlord
+            return res.status(Constant.NOT_FOUND).json({
+                code: Constant.NOT_FOUND,
+                message: Constant.PROPERTIES_NOT_FOUND
+            });
+        }
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 property.createProperty = async (req, res) => {
@@ -85,13 +130,58 @@ property.createProperty = async (req, res) => {
     }
 }
 
-property.updateProperty = async (req,res) => {
-    // NOTE: propertyId ,rating is cannot be updated
-    // req.body = { propertyId:number , data: { data to be updated }}
-    // Check If Landlord Allowed To Update The Property
-    // Update the Property data
-    // Set property verification_status:false
-    return res.send("OK");
+property.updateProperty = async (req, res) => {
+    try {
+        // NOTE: propertyId ,rating is cannot be updated
+        // req.body = { propertyId:number , data: { data to be updated }}
+        const { propertyId, data } = req.body;
+
+        if (!propertyId || !data) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST
+            });
+        }
+        // Finding the property by it's id
+        const property = await db.property.findOne({ where: { id: propertyId } });
+
+        if (!property) {
+            return res.status(Constant.NOT_FOUND).json({
+                code: Constant.NOT_FOUND,
+                message: Constant.PROPERTY_NOT_FOUND,
+            });
+        }
+
+        // Checking If Landlord Allowed To Update The Property
+        if (property.landlordId !== req.user.id) {
+            return res.status(Constant.FORBIDDEN_CODE).json({
+                code: Constant.FORBIDDEN_CODE,
+                message: Constant.UNAUTHORIZED_REQUEST,
+            });
+        }
+
+        // Set property verification_status:false
+        if (data.verification_status) {
+            data.verification_status = false;
+        }
+
+        // Update the Property data
+        await db.property.update(data, {
+            where: { id: propertyId },
+        });
+
+
+        // If property successfully updated
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS,
+        });
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 property.deleteProperty = async (req,res) => {
