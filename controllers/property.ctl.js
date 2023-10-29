@@ -191,4 +191,43 @@ property.deleteProperty = async (req,res) => {
     return res.send("OK");
 }
 
+property.getProperty = async (req, res) => {
+    try {
+        //Get propertyId from req.params
+        const { propertyId } = req.params;
+
+        // Return property with specific fields found by propertyId
+        const property = await db.property.findOne({
+            where: { id: propertyId },
+            include: {
+                model: db.property_image,
+                as: 'images', // Specify the alias used 
+                attributes: ['id', 'img_url'],
+            },
+            attributes: ['id', 'property_type', 'property_name', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
+        });
+
+        if (property) {
+            // Return success response with the found property
+            return res.status(Constant.SUCCESS_CODE).json({
+                code: Constant.SUCCESS_CODE,
+                data: property
+            });
+        }
+        else {
+            // if no property were found
+            return res.status(Constant.NOT_FOUND).json({
+                code: Constant.NOT_FOUND,
+                message: Constant.PROPERTY_NOT_FOUND
+            });
+        }
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
 module.exports = property;

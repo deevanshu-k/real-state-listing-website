@@ -12,5 +12,6 @@ router.get("", rateLimiter.landlordOperationsRouteRateLimiter, auth.checkAuthent
 router.put("", rateLimiter.landlordOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.landlord, property.createProperty);
 router.post("", rateLimiter.landlordOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.landlord, property.updateProperty);
 router.delete("", rateLimiter.landlordOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.landlord, property.deleteProperty);
+router.get("/:propertyId", rateLimiter.landlordOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.landlord, property.getProperty);
 
 module.exports = router;
