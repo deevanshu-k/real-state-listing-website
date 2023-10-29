@@ -30,6 +30,7 @@ app.use("/api/login", require("./routes/login"));
 app.use("/api/payment", require("./routes/payment"));
 app.use("/api/property", require("./routes/property"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/password", require("./routes/password"));
 
 // Handling non matching request from the client
 app.use((req, res, next) => {
