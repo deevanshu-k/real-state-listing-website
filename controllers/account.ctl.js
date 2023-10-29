@@ -4,6 +4,10 @@ const Constant = require("../config/constant");
 const validation = require("../helpers/validation");
 const bcrypt = require('bcryptjs');
 const db = require('../models');
+const crypto = require("crypto");
+const mail = require("../helpers/mail");
+const passwordHelper = require('../helpers/password');
+const salt = bcrypt.genSaltSync(10);
 
 let account = {};
 
@@ -135,6 +139,90 @@ account.login = async (req, res) => {
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,
             data: error.message.message
+        })
+    }
+}
+
+account.requestPasswordReset = async (req, res) => {
+    try {
+        // Create Token
+        let tokenBody = {
+            id: req.user.id,
+            role: req.user.role,
+            username: req.user.username,
+            email: req.user.email
+        };
+        let resetToken = crypto.randomBytes(32).toString("hex");
+        const hash = await bcrypt.hash(resetToken + Date.now(), Number(bcrypt.genSalt()));
+        
+        // Cache the hash and tokenObj
+        passwordHelper.cachePswdResetToken(hash, tokenBody);
+
+        // Send Email
+        let emailObj = {
+            email: tokenBody.email,
+            username: tokenBody.username,
+            link: `${process.env.CLIENT_URL}/resetpassword?token=${hash}`
+        };
+        await mail.sendEmailForPasswordResetLink(emailObj);
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.PSWD_RESETLINK_GENERATED_SUCCESS
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
+account.resetPassword = async (req, res) => {
+    try {
+        // Get Token
+        let { token, password } = req.body;
+        if (!token || !password) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST
+            });
+        }
+
+        // Get Cache
+        let cache = passwordHelper.getUserObj(token);
+        if (!cache) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.PSWD_RESET_TIMEOUT
+            });
+        }
+
+        // Reset Password
+        let newPassword = bcrypt.hashSync(password, salt);
+
+        if (cache.role === 'TENANT') {
+            await db.tenant.update({ password: newPassword }, { where: { email: cache.email } });
+        }
+        else if (cache.role === 'LANDLORD') {
+            await db.landlord.update({ password: newPassword }, { where: { email: cache.email } });
+        }
+        else if (cache.role === 'ADMIN') {
+            await db.admin.update({ password: newPassword }, { where: { email: cache.email } });
+        }
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.PSWD_CHANGED
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
         })
     }
 }
