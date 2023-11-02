@@ -43,4 +43,28 @@ mail.sendEmailVerificationOtpEmail = async (objMail) => {
     }
 }
 
+mail.sendEmailForPasswordResetLink = async (objMail) => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            let mailOptions = {
+                from: process.env.MAIL_FROM,
+                to: objMail.email,
+                subject: `Link for password reset`,
+                text: 'RentQube welcomes you',
+                html: `Hi, ${objMail.username}! <br>
+
+                You requested to reset your password.<br>
+                
+                Please, click the link below to reset your password.<br>
+                
+                Password Change Link: ${objMail.link}`
+            }
+            let response = await mailer.sendEmail(mailOptions);
+            resolve(response);
+        })
+    } catch (error) {
+        reject(error);
+    }
+}
+
 module.exports = mail;

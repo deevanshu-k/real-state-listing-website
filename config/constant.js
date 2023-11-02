@@ -26,6 +26,11 @@ module.exports = {
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
     SUBSCRIPTION_PLAN_LIMIT_REACHED: "You've reached your subscription plan's usage limit. Consider upgrading for more access.",
 
+    // Password Reset
+    PSWD_RESETLINK_GENERATED_SUCCESS: "Reset link generated successfully",
+    PSWD_RESET_TIMEOUT: "Link expired !",
+    PSWD_CHANGED: "Password changed successfully",
+
     // Property
     PROPERTY_UNAUTH_ACCESS: "Property Not Belong To You !",
     PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
@@ -76,5 +81,5 @@ module.exports = {
             no_of_property: Number.POSITIVE_INFINITY
         }
     },
-    PROPERTY_TYPE: ['ROOM', 'HOME', 'FLAT', 'COMMERTIAL_SPACE', 'SHOP']
+    PROPERTY_TYPE: ['ROOM', 'HOME', 'FLAT', 'COMMERCIAL_SPACE']
 }
