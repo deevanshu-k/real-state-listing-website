@@ -26,7 +26,7 @@ validation.propertyCreation = async (data) => {
         state: Joi.string().required(),
         district: Joi.string().required(),
         zipcode: Joi.number().integer().required(),
-        remark: Joi.string(),
+        remark: Joi.string().allow('').required(),
         no_of_rooms: Joi.number().integer().min(1).required(),
         price: Joi.number().min(0).required(),
         attached_kitchen: Joi.boolean().required(),

@@ -100,7 +100,7 @@ property.createProperty = async (req, res) => {
         }
 
         // Create Property Set  verification_status:false,rating:0 
-        await db.property.create({
+        let propertyData = await db.property.create({
             landlordId: req.user.id,
             property_type,
             offer_type,
@@ -117,14 +117,17 @@ property.createProperty = async (req, res) => {
             include_electricity_price,
             verification_status: false,
             rating: 0,
-        })
+        });
+        propertyData = JSON.parse(JSON.stringify(propertyData));
 
         //If property successfully created
         return res.status(Constant.SUCCESS_CODE).json({
             code: Constant.SUCCESS_CODE,
             message: Constant.SAVE_SUCCESS,
+            data: { ...propertyData, images: [] }
         });
     } catch (error) {
+        console.log(error);
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,
