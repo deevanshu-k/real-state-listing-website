@@ -10,8 +10,8 @@ let tenant = {};
 tenant.register = async (req, res) => {
     try {
         // Check for required inputs
-        let { username, email, password, address } = req.body;
-        if (!username || !email || !password || !address) {
+        let { username, email, password, address, phone_no } = req.body;
+        if (!username || !email || !password || !address || !phone_no) {
             return res.status(Constant.BAD_REQUEST).json({
                 code: Constant.BAD_REQUEST,
                 message: Constant.REQUEST_BAD_REQUEST
@@ -40,6 +40,7 @@ tenant.register = async (req, res) => {
         tenantData = await db.tenant.create({
             username,
             email,
+            phone_no,
             password,
             subscription_plans: [{
                 plan_type: "FREETENANT",

@@ -40,6 +40,7 @@ models.Sequelize = Sequelize;
             let lOnj = {
                 username: "Test Yadav",
                 email: "astroboiscosmos@gmail.com",
+                phone_no:"7689543216",
                 password: bcrypt.hashSync("Landlord@123456"),
                 subscription_plans: {
                     plan_type: "FREELANDLORD",
@@ -65,6 +66,7 @@ models.Sequelize = Sequelize;
                 role: 'LANDLORD',
                 username: landlord.username,
                 email: landlord.email,
+                phone_no: landlord.phone_no,
                 subscription_plan: landlord.subscription_plans[0].plan_type,
                 profile_image: landlord.profile_image
             }
@@ -77,6 +79,7 @@ models.Sequelize = Sequelize;
             let tOnj = {
                 username: "Test Sharma",
                 email: "deevanshukushwah80@gmail.com",
+                phone_no: "7689543216",
                 password: bcrypt.hashSync("Tenant@123456"),
                 subscription_plans: {
                     plan_type: "FREETENANT",
@@ -102,6 +105,7 @@ models.Sequelize = Sequelize;
                 role: 'TENANT',
                 username: tenant.username,
                 email: tenant.email,
+                phone_no: tenant.phone_no,
                 subscription_plan: tenant.subscription_plans[0].plan_type,
                 profile_image: tenant.profile_image
             }
