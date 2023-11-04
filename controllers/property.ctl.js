@@ -210,7 +210,7 @@ property.getProperty = async (req, res) => {
                 as: 'images', // Specify the alias used 
                 attributes: ['id', 'img_url'],
             },
-            attributes: ['id', 'property_type', 'property_name', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
+            attributes: ['id', 'offer_type', 'property_type', 'property_name', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
         });
 
         if (property) {
