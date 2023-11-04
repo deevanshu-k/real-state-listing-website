@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const {PROPERTY_TYPE, NO_OF_IMAGES_PER_PROPERTY} = require('../config/constant.js');
+const { PROPERTY_TYPE, NO_OF_IMAGES_PER_PROPERTY, OFFER_TYPE } = require('../config/constant.js');
 var validation = {};
 
 validation.userLogin = async (data) => {
@@ -21,6 +21,7 @@ validation.userLogin = async (data) => {
 validation.propertyCreation = async (data) => {
     const schema = Joi.object({
         property_type: Joi.string().valid(...PROPERTY_TYPE).required(),
+        offer_type: Joi.string().valid(...OFFER_TYPE).required(),
         property_name: Joi.string().required(),
         state: Joi.string().required(),
         district: Joi.string().required(),

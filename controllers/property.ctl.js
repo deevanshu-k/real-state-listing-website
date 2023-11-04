@@ -31,6 +31,7 @@ property.getAllProperties = async (req, res) => {
             const properties = allProperties.map(property => ({
                 id: property.id,
                 property_type: property.property_type,
+                offer_type: property.offer_type,
                 property_name: property.property_name,
                 verification_status: property.verification_status,
                 state: property.state,
@@ -88,8 +89,8 @@ property.createProperty = async (req, res) => {
 
         // Need All Required Field in req.body: 
         //  property_type,property_name,state,district,zipcode,remark,no_of_rooms,price,attached_kitchen,attached_bathroom,include_water_price,include_electricity_price
-        let { property_type, property_name, state, district, zipcode, remark, no_of_rooms, price, attached_kitchen, attached_bathroom, include_water_price, include_electricity_price } = req.body
-        let data = await validation.propertyCreation({ property_type, property_name, state, district, zipcode, remark, no_of_rooms, price, attached_kitchen, attached_bathroom, include_water_price, include_electricity_price });
+        let { property_type, offer_type, property_name, state, district, zipcode, remark, no_of_rooms, price, attached_kitchen, attached_bathroom, include_water_price, include_electricity_price } = req.body
+        let data = await validation.propertyCreation({ property_type, offer_type, property_name, state, district, zipcode, remark, no_of_rooms, price, attached_kitchen, attached_bathroom, include_water_price, include_electricity_price });
         if (data.message) {
             // Wrong Data
             return res.status(Constant.BAD_REQUEST).json({
@@ -102,6 +103,7 @@ property.createProperty = async (req, res) => {
         await db.property.create({
             landlordId: req.user.id,
             property_type,
+            offer_type,
             property_name,
             state,
             district,
@@ -184,7 +186,7 @@ property.updateProperty = async (req, res) => {
     }
 }
 
-property.deleteProperty = async (req,res) => {
+property.deleteProperty = async (req, res) => {
     // req.body = { propertyId:number }
     // Check If Landlord Allowed To Delete The Property
     // Delete Property And Their Images In Property_Images Table + In S3 Bucket
