@@ -36,6 +36,7 @@ account.login = async (req, res) => {
                         role: 'TENANT',
                         username: tenant.username,
                         email: tenant.email,
+                        phone_no: tenant.phone_no,
                         subscription_plan: sub_plan[0].plan_type,
                         profile_image: tenant.profile_image
                     }
@@ -72,6 +73,7 @@ account.login = async (req, res) => {
                         role: 'LANDLORD',
                         username: landlord.username,
                         email: landlord.email,
+                        phone_no: landlord.phone_no,
                         subscription_plan: sub_plan[0].plan_type,
                         profile_image: landlord.profile_image
                     }
