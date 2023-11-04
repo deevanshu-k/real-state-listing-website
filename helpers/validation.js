@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { PROPERTY_TYPE, NO_OF_IMAGES_PER_PROPERTY, OFFER_TYPE } = require('../config/constant.js');
+const { PROPERTY_TYPE, NO_OF_IMAGES_PER_PROPERTY, OFFER_TYPE, PROPERTY_ADDIMAGE_LIMIT_EXCEED } = require('../config/constant.js');
 var validation = {};
 
 validation.userLogin = async (data) => {
@@ -45,7 +45,7 @@ validation.propertyCreation = async (data) => {
 validation.uploadPropertyImage = async (data) => {
     const schema = Joi.object({
         propertyId: Joi.number().required(),
-        imageNo: Joi.number().min(1).max(NO_OF_IMAGES_PER_PROPERTY).required()
+        imageNo: Joi.number().min(1).max(NO_OF_IMAGES_PER_PROPERTY).required().messages({ 'number.max': PROPERTY_ADDIMAGE_LIMIT_EXCEED })
     });
     try {
         const value = await schema.validateAsync(data);

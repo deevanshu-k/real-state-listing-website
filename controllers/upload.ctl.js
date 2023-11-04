@@ -197,8 +197,9 @@ uploads.uploadPropertyImage = async (req, res) => {
             key: req.file.key
         };
         const foundItem = await db.property_image.findOne({ where: { propertyId: imgData.propertyId, key: imgData.key } });
+        let Imgdata = foundItem;
         if(!foundItem){
-            await db.property_image.create(imgData);
+            Imgdata = await db.property_image.create(imgData);
         }
 
         // Return SUCCESS
@@ -206,7 +207,8 @@ uploads.uploadPropertyImage = async (req, res) => {
             code: Constant.SUCCESS_CODE,
             message: Constant.PROPERTY_IMAGEADDED,
             data: {
-                url: imgData.img_url
+                id: Imgdata.id,
+                img_url: imgData.img_url
             }
         });
 
