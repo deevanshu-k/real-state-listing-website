@@ -4,7 +4,7 @@ let rateLimiter = {};
 
 rateLimiter.loginRouteRateLimiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 min
-	limit: 5, // Limit each IP to 100 requests per `window` (here, per 10 minutes)
+	limit: 50, // Limit each IP to 100 requests per `window` (here, per 10 minutes)
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 	message: async (req,res) => {
@@ -18,7 +18,7 @@ rateLimiter.loginRouteRateLimiter = rateLimit({
 
 rateLimiter.paymentRouteRateLimiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 10 min
-	limit: 10, // Limit each IP to 100 requests per `window` (here, per 10 minutes)
+	limit: 40, // Limit each IP to 100 requests per `window` (here, per 10 minutes)
 	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 	message: async (req,res) => {

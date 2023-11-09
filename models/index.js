@@ -40,10 +40,10 @@ models.Sequelize = Sequelize;
             let lOnj = {
                 username: "Test Yadav",
                 email: "astroboiscosmos@gmail.com",
-                phone_no:"7689543216",
+                phone_no: "7689543216",
                 password: bcrypt.hashSync("Landlord@123456"),
                 subscription_plans: {
-                    plan_type: "FREELANDLORD",
+                    plan_type: "STANDARDLANDLORD",
                     payment_id: "NA",
                     order_id: "NA",
                     payment_method: "NA",
@@ -116,11 +116,141 @@ models.Sequelize = Sequelize;
                 token: tenantToken
             });
 
+            // Add Sample Properties
+            await models.property.bulkCreate([
+                {
+                    landlordId: 1,
+                    property_type: "HOUSE",
+                    offer_type: "SELL",
+                    property_name: "Cozy Cottage",
+                    verification_status: true,
+                    state: "California",
+                    district: "Los Angeles",
+                    zipcode: 90001,
+                    remark: "A lovely cottage in a quiet neighborhood.",
+                    no_of_rooms: 3,
+                    price: 250000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.5
+                },
+                {
+                    landlordId: 1,
+                    property_type: "ROOM",
+                    offer_type: "RENT",
+                    property_name: "Luxury Penthouse",
+                    verification_status: true,
+                    state: "New York",
+                    district: "Manhattan",
+                    zipcode: 10001,
+                    remark: "Stunning penthouse with city views.",
+                    no_of_rooms: 4,
+                    price: 6000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.8
+                },
+                {
+                    landlordId: 1,
+                    property_type: "HOUSE",
+                    offer_type: "SELL",
+                    property_name: "Modern Condo",
+                    verification_status: true,
+                    state: "Florida",
+                    district: "Miami",
+                    zipcode: 33101,
+                    remark: "Sleek and modern condo in the heart of the city.",
+                    no_of_rooms: 2,
+                    price: 350000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.7
+                },
+                {
+                    landlordId: 1,
+                    property_type: "SHOP",
+                    offer_type: "RENT",
+                    property_name: "Family Home",
+                    verification_status: true,
+                    state: "Texas",
+                    district: "Houston",
+                    zipcode: 77001,
+                    remark: "Spacious family home with a large backyard.",
+                    no_of_rooms: 5,
+                    price: 2000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.4
+                },
+                {
+                    landlordId: 1,
+                    property_type: "SHOP",
+                    offer_type: "RENT",
+                    property_name: "Family Home",
+                    verification_status: true,
+                    state: "Texas",
+                    district: "Houston",
+                    zipcode: 77001,
+                    remark: "Spacious family home with a large backyard.",
+                    no_of_rooms: 5,
+                    price: 2000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.4
+                },
+                {
+                    landlordId: 1,
+                    property_type: "SHOP",
+                    offer_type: "RENT",
+                    property_name: "Family Home",
+                    verification_status: true,
+                    state: "Texas",
+                    district: "Houston",
+                    zipcode: 77001,
+                    remark: "Spacious family home with a large backyard.",
+                    no_of_rooms: 5,
+                    price: 2000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.4
+                },
+                {
+                    landlordId: 1,
+                    property_type: "SHOP",
+                    offer_type: "RENT",
+                    property_name: "Family Home",
+                    verification_status: true,
+                    state: "Texas",
+                    district: "Houston",
+                    zipcode: 77001,
+                    remark: "Spacious family home with a large backyard.",
+                    no_of_rooms: 5,
+                    price: 2000,
+                    attached_kitchen: true,
+                    attached_bathroom: true,
+                    include_water_price: true,
+                    include_electricity_price: true,
+                    rating: 4.4
+                }
+            ]);
+
             // Dev Tokens For Api Testing
             if (devValues.length) console.log("\n---------------------------Dev-Tokens : Use This Token For Dev Testing--------------------------->");
             devValues.forEach(d => {
                 console.log(d.user + " : " + d.token);
-                if(d != devValues[devValues.length-1]) console.log("\n");
+                if (d != devValues[devValues.length - 1]) console.log("\n");
             })
             if (devValues.length) console.log("---------------------------------------------------------------------------------------------------->\n");
         }
