@@ -53,7 +53,7 @@ module.exports = {
 
     // PROPERTY Image Uploads
     PROPERTY_IMAGEADDED: "Image Added !",
-    NO_OF_IMAGES_PER_PROPERTY:5,
+    NO_OF_IMAGES_PER_PROPERTY:3,
     PROPERTY_ADDIMAGE_LIMIT_EXCEED:"Property Images Limit Exceed !",
     NO_PROPERTY_IMAGE_SELECTED: "No Image Selected !",
 
@@ -81,6 +81,6 @@ module.exports = {
             no_of_property: Number.POSITIVE_INFINITY
         }
     },
-    PROPERTY_TYPE: ['ROOM', 'HOME', 'FLAT', 'COMMERCIAL_SPACE'],
+    PROPERTY_TYPE: ['ROOM', 'HOUSE', 'FLAT', 'COMMERCIAL_SPACE'],
     OFFER_TYPE: ['RENT','SELL']
 }

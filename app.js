@@ -29,6 +29,7 @@ app.use("/api/register", require("./routes/register"));
 app.use("/api/login", require("./routes/login"));
 app.use("/api/payment", require("./routes/payment"));
 app.use("/api/property", require("./routes/property"));
+app.use("/api/util", require("./routes/util"));
 app.use("/api/upload", require("./routes/upload"));
 app.use("/api/password", require("./routes/password"));
 
