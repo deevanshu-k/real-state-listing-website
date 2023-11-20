@@ -1,6 +1,5 @@
 const Constant = require("../config/constant");
 const validation = require("../helpers/validation");
-const { deletePropertyImages } = require("../helpers/upload");
 const db = require("../models");
 const { DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../lib/s3storage");
