@@ -1,6 +1,8 @@
 const Constant = require("../config/constant");
 const validation = require("../helpers/validation");
 const db = require("../models");
+const { DeleteObjectsCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../lib/s3storage");
 
 
 let property = {};
@@ -45,7 +47,7 @@ property.getAllProperties = async (req, res) => {
                 include_water_price: property.include_water_price,
                 include_electricity_price: property.include_electricity_price,
                 rating: property.rating,
-                images: property.images.map(image => ({
+                images: property.images.map(image => ({ // TODO: images are in sorted form
                     id: image.id,
                     img_url: image.img_url
                 })) // "images" is an array of  [{ id, img_url }]
@@ -79,7 +81,7 @@ property.createProperty = async (req, res) => {
         // Check If Landlord Allowed to create new property
         const propertyLimit = Constant.PLANS[user.subscription_plan].no_of_property
         const countProperty = await db.property.count({ where: { landlordId: req.user.id } });
-        if (countProperty === propertyLimit) {
+        if (countProperty === propertyLimit) { // BUG: What is somehow more than allowed propety already exist
             return res.status(Constant.FORBIDDEN_CODE).json({
                 code: Constant.FORBIDDEN_CODE,
                 message: Constant.SUBSCRIPTION_PLAN_LIMIT_REACHED
@@ -172,7 +174,7 @@ property.updateProperty = async (req, res) => {
         }
 
         // Update the Property data
-        await db.property.update(data, {
+        await db.property.update(data, { // BUG: Validate Data
             where: { id: propertyId },
         });
 
@@ -191,10 +193,72 @@ property.updateProperty = async (req, res) => {
 }
 
 property.deleteProperty = async (req, res) => {
-    // req.body = { propertyId:number }
-    // Check If Landlord Allowed To Delete The Property
-    // Delete Property And Their Images In Property_Images Table + In S3 Bucket
-    return res.send("OK");
+    try {
+        //Get propertyId from req.params
+        const { propertyId } = req.params;
+
+        // Check If Landlord Allowed To Delete The Property
+        let property = await db.property.findOne({
+            where: {
+                id: propertyId,
+                landlordId: req.user.id
+            }
+        });
+
+        if (!property) {
+            return res.status(Constant.NOT_FOUND).json({
+                code: Constant.NOT_FOUND,
+                message: Constant.PROPERTY_NOT_FOUND,
+            });
+        }
+
+        // Get Images Keys
+        let imagesKeys = await db.property_image.findAll({
+            where: {
+                propertyId: propertyId
+            },
+            attributes: ['key'],
+            raw: true
+        });
+        // Delete Images
+        await db.property_image.destroy({
+            where: {
+                propertyId: propertyId
+            }
+        });
+        // Delete Property
+        await db.property.destroy({
+            where: {
+                id: propertyId
+            }
+        });
+        // Delete Images From S3
+        imagesKeys = imagesKeys.map(d => {
+            return {
+                Key: d.key
+            }
+        });
+        if (Array.isArray(imagesKeys) && imagesKeys.length) {
+            const command = new DeleteObjectsCommand({
+                Bucket: process.env.aws_bucket_name,
+                Delete: {
+                    Objects: imagesKeys,
+                },
+            });
+            await s3.send(command);
+        }
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.PROPERTY_DELETED
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 property.getProperty = async (req, res) => {

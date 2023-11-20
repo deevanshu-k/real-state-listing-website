@@ -36,6 +36,7 @@ module.exports = {
     PROPERTIES_NOT_FOUND: 'No properties found for this landlord.',
     UPDATE_SUCCESS: 'Requested record updated successfully',
     PROPERTY_NOT_FOUND: 'Property not found!',
+    PROPERTY_DELETED: 'Property deleted successfully',
 
     // Profile Image Uploads
     PROFILEIMAGE_UPDATED: "Profile Image Updated !",
