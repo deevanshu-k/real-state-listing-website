@@ -48,5 +48,36 @@ userControllers.getUserDocuments = async (req, res) => {
     }
 }
 
+/*
+    Admin Controller Methods
+*/
+userControllers.getAllLandlords = async (req, res) => {
+    try {
+        let landlords = await db.landlord.findAll({});
+        return res.status(Constant.SUCCESS_CODE).json(landlords);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
+userControllers.getAllTenants = async (req, res) => {
+    try {
+        let tenants = await db.tenant.findAll({});
+        return res.status(Constant.SUCCESS_CODE).json(tenants);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
 
 module.exports = userControllers;
