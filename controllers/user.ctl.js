@@ -79,5 +79,67 @@ userControllers.getAllTenants = async (req, res) => {
     }
 }
 
+userControllers.getLandlordDocuments = async (req, res) => {
+    try {
+        const { Id } = req.params;
+        let documents = [];
+
+        documents = await db.document.findAll({
+            where: {
+                landlordId: Id
+            },
+            raw: true
+        });
+
+        documents = documents.map(d => {
+            return {
+                id: d.id,
+                type: d.type,
+                url: d.document_url
+            }
+        });
+
+        res.status(200).json(documents);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
+userControllers.getTenantDocuments = async (req, res) => {
+    try {
+        const { Id } = req.params;
+        let documents = [];
+
+        documents = await db.document.findAll({
+            where: {
+                tenantId: Id
+            },
+            raw: true
+        });
+
+        documents = documents.map(d => {
+            return {
+                id: d.id,
+                type: d.type,
+                url: d.document_url
+            }
+        });
+
+        res.status(200).json(documents);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
 
 module.exports = userControllers;
