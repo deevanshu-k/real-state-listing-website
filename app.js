@@ -8,6 +8,7 @@ const path = require('path');
 const Constant = require('./config/constant');
 const schedule = require('node-schedule');
 const db = require('./models');
+const { Op } = require('sequelize');
 const chalk = require('chalk');
 
 // parse application/json
@@ -71,3 +72,48 @@ schedule.scheduleJob('*/10 * * * *', async () => {
     console.log(chalk.blueBright("No of tenant destroyed: " + destroyedTenant));
     console.log(chalk.red("----------------------------Job Done----------------------------------"));
 });
+
+schedule.scheduleJob('0 0 * * *',async () => {
+    console.log(chalk.red("\n\n\n--------------------------Job Running!--------------------------------"));
+    console.log(chalk.redBright("Job Description : Landlord Subscription Checking"));
+    // Get Expired Subscriptions
+    let expiredSubscriptions = await db.subscription_plan.findAll({
+        where: {
+            status: true,
+            exp_date: {
+                [Op.lte] : new Date()
+            }
+        },
+        raw: true
+    });
+
+    let ld = [];
+    expiredSubscriptions.forEach(d => {
+        if(d.landlordId) ld.push(d.landlordId);
+    });
+
+    // Cancel Expired Subscription
+    await db.subscription_plan.update({status:false},{
+        where: {
+            landlordId: ld
+        }
+    });
+
+    let freeLdSubData = [];
+    ld.forEach(id => {
+        freeLdSubData.push({
+            landlordId: id,
+            plan_type: "FREELANDLORD",
+            payment_id: "NA",
+            order_id: "NA",
+            payment_method: "NA",
+            status: true
+        });
+    });
+
+    // Add Default Plan
+    await db.subscription_plan.bulkCreate([...freeLdSubData]);
+    console.log(ld);
+    console.log(chalk.blueBright("Ids of landlord : " + String(ld)));
+    console.log(chalk.red("----------------------------Job Done----------------------------------"));
+})
