@@ -57,6 +57,9 @@ module.exports = {
     PROPERTY_ADDIMAGE_LIMIT_EXCEED:"Property Images Limit Exceed !",
     NO_PROPERTY_IMAGE_SELECTED: "No Image Selected !",
 
+    //User Update
+    INVALID_PHONE:"Invalid Phone Number!",
+
     PLANS: {
         "PREMIUMTENANT": {
             type: "PREMIUMTENANT",
@@ -82,5 +85,6 @@ module.exports = {
         }
     },
     PROPERTY_TYPE: ['ROOM', 'HOUSE', 'FLAT', 'COMMERCIAL_SPACE'],
-    OFFER_TYPE: ['RENT','SELL']
+    OFFER_TYPE: ['RENT','SELL'],
+    PHONE_REGEX : /^\d{10}$/
 }
