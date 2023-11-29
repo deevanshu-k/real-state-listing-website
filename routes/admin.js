@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const rateLimiter = require("../middileware/rate-limit");
 const userControllers = require("../controllers/user.ctl");
-const property = require("../controllers/property.ctl");
+const propertyControllers = require("../controllers/property.ctl");
 const checkUser = require("../middileware/user");
 const auth = require("../middileware/auth");
 
@@ -18,6 +18,6 @@ router.get("/tenant/:Id/documents", rateLimiter.commonOperationsRouteRateLimiter
 
 // For Property
 /* Get All Property + Get Landlord All Property */
-router.get("/property", property.adminGetAllProperty);
+router.get("/property", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminGetAllProperty);
 
 module.exports = router;
