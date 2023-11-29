@@ -53,7 +53,9 @@ userControllers.getUserDocuments = async (req, res) => {
 */
 userControllers.getAllLandlords = async (req, res) => {
     try {
-        let landlords = await db.landlord.findAll({});
+        let landlords = await db.landlord.findAll({
+            attributes: ['id', 'username', 'email', 'phone_no', 'profile_image', 'address', 'verification_status', 'verified_email']
+        });
         return res.status(Constant.SUCCESS_CODE).json(landlords);
 
     } catch (error) {
@@ -67,7 +69,9 @@ userControllers.getAllLandlords = async (req, res) => {
 
 userControllers.getAllTenants = async (req, res) => {
     try {
-        let tenants = await db.tenant.findAll({});
+        let tenants = await db.tenant.findAll({
+            attributes: ['id', 'username', 'email', 'phone_no', 'profile_image', 'address', 'verification_status', 'verified_email']
+        });
         return res.status(Constant.SUCCESS_CODE).json(tenants);
 
     } catch (error) {
