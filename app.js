@@ -35,6 +35,8 @@ app.use("/api/upload", require("./routes/upload"));
 app.use("/api/password", require("./routes/password"));
 app.use("/api/user", require("./routes/user"));
 
+app.use("/api/admin", require("./routes/admin"));
+
 // Handling non matching request from the client
 app.use((req, res, next) => {
     return res.status(Constant.NOT_FOUND).json({
