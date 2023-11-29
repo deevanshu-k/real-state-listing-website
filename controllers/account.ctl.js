@@ -114,7 +114,7 @@ account.login = async (req, res) => {
                         profile_image: admin.profile_image
                     }
                     // Add JWT-Token
-                    adminData.jwtToken = jwt.sign(adminData, process.env.SECRET);
+                    adminData.jwtToken = jwt.sign(adminData, process.env.SECRET, { expiresIn: process.env.TOKEN_EXP_TIME });
                     return res.status(Constant.SUCCESS_CODE).json({
                         code: Constant.SUCCESS_CODE,
                         message: Constant.USER_LOGIN_SUCCESS,

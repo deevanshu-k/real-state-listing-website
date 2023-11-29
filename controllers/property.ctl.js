@@ -300,4 +300,25 @@ property.getProperty = async (req, res) => {
     }
 }
 
+/* Admin Controllers */
+property.adminGetAllProperty = async (req, res) => {
+    try {
+        let allProperties = [];
+        if (req.query.id) {
+            allProperties = await db.property.findAll({ where: { landlordId: req.query.id }, include: ['images'] });
+        }
+        else {
+            allProperties = await db.property.findAll({ include: ['images'] });
+        }
+
+        return res.status(Constant.SUCCESS_CODE).json(allProperties);
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
 module.exports = property;
