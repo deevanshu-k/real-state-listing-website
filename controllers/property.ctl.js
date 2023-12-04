@@ -35,6 +35,7 @@ property.getAllProperties = async (req, res) => {
                 property_type: property.property_type,
                 offer_type: property.offer_type,
                 property_name: property.property_name,
+                publish_status: property.publish_status,
                 verification_status: property.verification_status,
                 state: property.state,
                 district: property.district,
@@ -117,6 +118,7 @@ property.createProperty = async (req, res) => {
             attached_bathroom,
             include_water_price,
             include_electricity_price,
+            publish_status: false,
             verification_status: false,
             rating: 0,
         })
@@ -274,7 +276,7 @@ property.getProperty = async (req, res) => {
                 as: 'images', // Specify the alias used 
                 attributes: ['id', 'img_url'],
             },
-            attributes: ['id', 'offer_type', 'property_type', 'property_name', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
+            attributes: ['id', 'offer_type', 'property_type', 'property_name', 'publish_status', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
         });
 
         if (property) {
