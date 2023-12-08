@@ -376,7 +376,8 @@ property.adminPropertyUnverify = async (req, res) => {
 
         // Verify Property
         await db.property.update({
-            verification_status: false
+            verification_status: false,
+            publish_status: false
         }, {
             where: {
                 id: propertyId
