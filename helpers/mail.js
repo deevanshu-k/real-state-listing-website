@@ -93,4 +93,32 @@ mail.sendEmailToLandlordPropertyVerified = async (objMail) => {
     }
 }
 
+/*
+ * objMail.email
+ * objMail.username
+ * objMail.propertyname
+ * objMail.message
+*/
+mail.sendEmailToLandlordPropertyUnverified = async (objMail) => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            let mailOptions = {
+                from: process.env.MAIL_FROM,
+                to: objMail.email,
+                subject: 'Property Unverified',
+                text: 'Welcome to RentQube',
+                html: `<h1>Hello ${objMail.username}<h1><br>
+                        <p>Your Property named ${objMail.propertyname} verification is cancelled by our administrator ! <br>
+                        message: ${objMail.message} <br>
+                        Try to update property details or update documents.</p>
+                        `
+            }
+            let response = await mailer.sendEmail(mailOptions);
+            resolve(response);
+        })
+    } catch (error) {
+        reject(error);
+    }
+}
+
 module.exports = mail;
