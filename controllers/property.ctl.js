@@ -3,7 +3,7 @@ const validation = require("../helpers/validation");
 const db = require("../models");
 const { DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../lib/s3storage");
-
+const mail = require("../helpers/mail");
 
 let property = {};
 
@@ -323,12 +323,52 @@ property.adminGetAllProperty = async (req, res) => {
     }
 }
 
-property.adminverify = async (req, res) => {
-    // Set landlord verification_status = true
-    // Send mail to landlord
+property.adminPropertyVerify = async (req, res) => {
+    try {
+        //Get propertyId from req.params
+        const { propertyId } = req.params;
+
+        // Verify Property
+        await db.property.update({
+            verification_status: true
+        }, {
+            where: {
+                id: propertyId
+            }
+        });
+
+        // Get Property
+        const property = await db.property.findOne({
+            where: {
+                id: propertyId
+            }
+        });
+        const landlord = await db.landlord.findOne({
+            id: property.landlordId
+        });
+
+        // Send mail
+        await mail.sendEmailToLandlordPropertyVerified({ 
+            email: landlord.email, 
+            username: landlord.username, 
+            propertyname: property.property_name 
+        });
+
+        // Successfully Verified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
-property.adminunverify = async (req, res) => {
+property.adminPropertyUnverify = async (req, res) => {
     // Set landlord verification_status = false
     // Send mail to landlord
 }

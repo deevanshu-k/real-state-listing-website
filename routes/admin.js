@@ -33,8 +33,8 @@ router.put("/tenants/:tenantId/unverify", rateLimiter.commonOperationsRouteRateL
 /* Get All Property + Get Landlord All Property */
 router.get("/property", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminGetAllProperty);
 /* Verify Property */
-router.put("/property/:propertyId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminverify);
+router.put("/property/:propertyId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminPropertyVerify);
 /* unverify Property */
-router.put("/property/:propertyId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminunverify);
+router.put("/property/:propertyId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin,  propertyControllers.adminPropertyUnverify);
 
 module.exports = router;
