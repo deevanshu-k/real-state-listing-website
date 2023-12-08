@@ -98,4 +98,15 @@ landlord.register = async (req, res) => {
     }
 }
 
+/* Admin */
+landlord.adminverify = async (req, res) => {
+    // Set landlord verification_status = true
+    // Send mail to landlord
+}
+
+landlord.adminunverify = async (req, res) => {
+    // Set landlord verification_status = false
+    // Send mail to landlord
+}
+
 module.exports = landlord;

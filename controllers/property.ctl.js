@@ -323,4 +323,14 @@ property.adminGetAllProperty = async (req, res) => {
     }
 }
 
+property.adminverify = async (req, res) => {
+    // Set landlord verification_status = true
+    // Send mail to landlord
+}
+
+property.adminunverify = async (req, res) => {
+    // Set landlord verification_status = false
+    // Send mail to landlord
+}
+
 module.exports = property;
