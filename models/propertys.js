@@ -32,6 +32,11 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             default: false
         },
+        publish_status: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            default: false
+        },
         state: {
             type: DataTypes.STRING(255),
             allowNull: false

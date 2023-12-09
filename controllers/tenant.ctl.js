@@ -97,4 +97,15 @@ tenant.register = async (req, res) => {
     }
 }
 
+/* Admin */
+tenant.adminverify = async (req, res) => {
+    // Set tenant verification_status = true
+    // Send mail to tentant
+}
+
+tenant.adminunverify = async (req, res) => {
+    // Set tenant verification_status = false
+    // Send mail to tentant
+}
+
 module.exports = tenant;
