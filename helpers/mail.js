@@ -121,4 +121,55 @@ mail.sendEmailToLandlordPropertyUnverified = async (objMail) => {
     }
 }
 
+/*
+ * objMail.email
+ * objMail.username
+*/
+mail.sendEmailToLandlordAsLandlordIsVerified = async (objMail) => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            let mailOptions = {
+                from: process.env.MAIL_FROM,
+                to: objMail.email,
+                subject: 'You Are Verified Successfully',
+                text: 'Welcome to RentQube',
+                html: `<h1>Hello ${objMail.username}<h1><br>
+                        <p>You Are Successfully Verified By The Administrator ! <br>
+                        Now you can add and publish new properties.</p>
+                        `
+            }
+            let response = await mailer.sendEmail(mailOptions);
+            resolve(response);
+        })
+    } catch (error) {
+        reject(error);
+    }
+}
+
+
+/*
+ * objMail.email
+ * objMail.username
+*/
+mail.sendEmailToTenantAsTenantIsVerified = async (objMail) => {
+    try {
+        return new Promise(async (resolve, reject) => {
+            let mailOptions = {
+                from: process.env.MAIL_FROM,
+                to: objMail.email,
+                subject: 'You Are Verified Successfully',
+                text: 'Welcome to RentQube',
+                html: `<h1>Hello ${objMail.username}<h1><br>
+                        <p>You Are Successfully Verified By The Administrator ! <br>
+                        Now you can search and contact property owner.</p>
+                        `
+            }
+            let response = await mailer.sendEmail(mailOptions);
+            resolve(response);
+        })
+    } catch (error) {
+        reject(error);
+    }
+}
+
 module.exports = mail;
