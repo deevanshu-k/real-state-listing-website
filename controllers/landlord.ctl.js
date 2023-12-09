@@ -99,14 +99,73 @@ landlord.register = async (req, res) => {
 }
 
 /* Admin */
-landlord.adminverify = async (req, res) => {
-    // Set landlord verification_status = true
-    // Send mail to landlord
+landlord.adminLandlordVerify = async (req, res) => {
+    try {
+        // Get landlordId
+        const { landlordId } = req.params;
+        
+        // Verify Landlord
+        await db.landlord.update({
+            verification_status: true
+        }, {
+            where: {
+                id: landlordId
+            }
+        });
+
+        // Get Landlord
+        const landlord = await db.landlord.findOne({
+            where: {
+                id: landlordId
+            }
+        });
+
+        // Send Mail
+        await mail.sendEmailToLandlordAsLandlordIsVerified({
+            email: landlord.email,
+            username: landlord.username
+        });
+
+        // Successfully Unverified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
-landlord.adminunverify = async (req, res) => {
-    // Set landlord verification_status = false
-    // Send mail to landlord
+landlord.adminLandlordUnverify = async (req, res) => {
+    try {
+        // Get landlordId
+        const { landlordId } = req.params;
+        
+        // Unverify Landlord
+        await db.landlord.update({
+            verification_status: false
+        }, {
+            where: {
+                id: landlordId
+            }
+        });
+
+        // Successfully Unverified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 module.exports = landlord;
