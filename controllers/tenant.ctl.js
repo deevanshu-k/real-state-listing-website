@@ -98,14 +98,73 @@ tenant.register = async (req, res) => {
 }
 
 /* Admin */
-tenant.adminverify = async (req, res) => {
-    // Set tenant verification_status = true
-    // Send mail to tentant
+tenant.adminTenantVerify = async (req, res) => {
+    try {
+        // Get tenantId
+        const { tenantId } = req.params;
+        
+        // Verify Tenant
+        await db.tenant.update({
+            verification_status: true
+        }, {
+            where: {
+                id: tenantId
+            }
+        });
+
+        // Get Tenant
+        const tenant = await db.tenant.findOne({
+            where: {
+                id: tenantId
+            }
+        });
+
+        // Send Mail
+        await mail.sendEmailToTenantAsTenantIsVerified({
+            email: tenant.email,
+            username: tenant.username
+        });
+
+        // Successfully Verified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
-tenant.adminunverify = async (req, res) => {
-    // Set tenant verification_status = false
-    // Send mail to tentant
+tenant.adminTenantUnverify = async (req, res) => {
+    try {
+        // Get tenantId
+        const { tenantId } = req.params;
+        
+        // Unverify Tenant
+        await db.tenant.update({
+            verification_status: false
+        }, {
+            where: {
+                id: tenantId
+            }
+        });
+
+        // Successfully Unverified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
 }
 
 module.exports = tenant;
