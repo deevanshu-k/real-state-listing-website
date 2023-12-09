@@ -20,14 +20,14 @@ router.get("/landlord/:Id/documents", rateLimiter.commonOperationsRouteRateLimit
 router.get("/tenant/:Id/documents", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, userControllers.getTenantDocuments);
 
 /* Verify Landlord */
-router.put("/landlords/:landlordId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, landlordControllers.adminverify);
+router.put("/landlords/:landlordId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, landlordControllers.adminLandlordVerify);
 /* Verify Tenant */
-router.put("/tenants/:tenantId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, tenantControllers.adminverify);
+router.put("/tenants/:tenantId/verify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, tenantControllers.adminTenantVerify);
 
 /* Unverify Landlord */
-router.put("/landlords/:landlordId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, landlordControllers.adminunverify);
+router.put("/landlords/:landlordId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, landlordControllers.adminLandlordUnverify);
 /* Unverify Tenant */
-router.put("/tenants/:tenantId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, tenantControllers.adminunverify);
+router.put("/tenants/:tenantId/unverify", rateLimiter.commonOperationsRouteRateLimiter, auth.checkAuthentication, checkUser.admin, tenantControllers.adminTenantUnverify);
 
 // For Property
 /* Get All Property + Get Landlord All Property */
