@@ -144,6 +144,62 @@ userControllers.getTenantDocuments = async (req, res) => {
         })
     }
 }
+userControllers.updateUserDetails = async (req, res) => {
+    try {
+        // Update User Details
+        const {id, role}=req.user;
+
+        // Get phone_no, address, username from the request body
+        const { username, phone_no, address } = req.body;
+
+        // Validating at least one field to update
+        if (!username && !phone_no && !address) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST
+            });
+        }
+
+        // Validate phone_no format 
+        if (phone_no && !Constant.PHONE_REGEX.test(phone_no)) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.INVALID_PHONE
+            });
+        }
+        // Constructing the update object based on the updated fields
+        const updateObject = {};
+        if (username) updateObject.username = username;
+        if (phone_no) updateObject.phone_no = phone_no;
+        if (address) updateObject.address = address;
+
+        //converting user role to lowercase for access db
+        const model = role.toLowerCase();
+
+        //find user from db model according to their role
+        const user = await db[model].findOne({ where: {id} });
+        if (user) {
+            // update user details
+            await db[model].update(updateObject, { where: {id} });
+            //If user details updated successfully
+            return res.json({
+                code: Constant.SUCCESS_CODE,
+                message: Constant.UPDATE_SUCCESS,
+            });
+        }
+
+        return res.status(Constant.BAD_REQUEST).json({
+            code: Constant.BAD_REQUEST,
+            message: Constant.REQUEST_BAD_REQUEST
+        });
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        });
+    }
+};
 
 
 module.exports = userControllers;
