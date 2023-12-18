@@ -22,7 +22,7 @@ let property = {};
     } object
 */
 
-
+/* Landlord Controllers */
 property.getAllProperties = async (req, res) => {
     try {
         // Return all properties of landlord ID (req.user.id) provided
@@ -293,6 +293,64 @@ property.getProperty = async (req, res) => {
                 message: Constant.PROPERTY_NOT_FOUND
             });
         }
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
+property.publishProperty = async (req, res) => {
+    try {
+        const user = req.user
+
+        // Get propertyId And publish From Query
+        const { propertyId, publish } = req.query;
+        if (!propertyId || (publish != 'true' && publish != 'false')) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST,
+            })
+        }
+
+        // Check If Property Belongs to landlord
+        const property = await db.property.findOne({ where: { landlordId: req.user.id, id: propertyId } });
+        if (!property) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST,
+            })
+        }
+
+        // Check If Landlord Allowed to publish more property
+        if (publish === 'true') {
+            const propertyLimit = Constant.PLANS[user.subscription_plan].no_of_property
+            const countPublishedProperty = await db.property.count({ where: { landlordId: user.id, publish_status: true } });
+            if (countPublishedProperty >= propertyLimit) { // BUG: What is somehow more than allowed propety already exist
+                return res.status(Constant.FORBIDDEN_CODE).json({
+                    code: Constant.FORBIDDEN_CODE,
+                    message: Constant.SUBSCRIPTION_PLAN_LIMIT_REACHED
+                });
+            }
+        }
+
+        // Update Property Publish Status
+        await db.property.update({
+            publish_status: publish
+        }, {
+            where: {
+                id: propertyId,
+                landlordId: user.id,
+                verification_status: true
+            }
+        });
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
 
     } catch (error) {
         return res.status(Constant.SERVER_ERROR).json({
