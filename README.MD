@@ -42,3 +42,32 @@
    - LANDLORD: delete rooms
    - LANDLORD: get rooms
    - TENANT: get rooms (based on plan)
+
+3) Landlord:
+   - publishProperty-Des-if(count(p-published) > n) (PATCH #21)
+   
+4) Admin:
+   - Get all landlords **DONE**
+   - Get all tenants **DONE**
+   - Get all properties after (PATCH #21) **DONE**
+
+   - Update profile photo
+
+   - Get landlord documents **DONE**
+   - Get tenant documents **DONE**
+
+   - Verify Landlord ( Also mail integration ) **DONE**
+   - Verify Tenant  ( Also mail integration ) **DONE**
+   - Verify Property  ( Also mail integration ) **DONE**
+
+   - UnVerify landlord ( Also mail integration ) **DONE**
+   - UnVerify tenant ( Also mail integration ) **DONE**
+   - UnVerify property ( Also mail integration ) **DONE**
+
+   - Delete tenant ( Also mail integration ) 
+   - Delete landlord ( Also mail integration ) 
+
+   - Delete property ( Also mail integration )
+
+   - Get server logs ( **Main--Security** )
+   - Get server health ( **Main--Security** )
