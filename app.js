@@ -10,6 +10,10 @@ const schedule = require('node-schedule');
 const db = require('./models');
 const { Op } = require('sequelize');
 const chalk = require('chalk');
+const { setupLogging } = require('./helpers/logger');
+
+// log setup
+setupLogging(app);
 
 // parse application/json
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -75,7 +79,7 @@ schedule.scheduleJob('*/10 * * * *', async () => {
     console.log(chalk.red("----------------------------Job Done----------------------------------"));
 });
 
-schedule.scheduleJob('0 0 * * *',async () => {
+schedule.scheduleJob('0 0 * * *', async () => {
     console.log(chalk.red("\n\n\n--------------------------Job Running!--------------------------------"));
     console.log(chalk.redBright("Job Description : Landlord Subscription Checking"));
     // Get Expired Subscriptions
@@ -83,7 +87,7 @@ schedule.scheduleJob('0 0 * * *',async () => {
         where: {
             status: true,
             exp_date: {
-                [Op.lte] : new Date()
+                [Op.lte]: new Date()
             }
         },
         raw: true
@@ -91,11 +95,11 @@ schedule.scheduleJob('0 0 * * *',async () => {
 
     let ld = [];
     expiredSubscriptions.forEach(d => {
-        if(d.landlordId) ld.push(d.landlordId);
+        if (d.landlordId) ld.push(d.landlordId);
     });
 
     // Cancel Expired Subscription
-    await db.subscription_plan.update({status:false},{
+    await db.subscription_plan.update({ status: false }, {
         where: {
             landlordId: ld
         }
