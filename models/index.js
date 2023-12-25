@@ -37,6 +37,20 @@ models.Sequelize = Sequelize;
                 password: bcrypt.hashSync("Admin@123456")
             };
             let admin = await models.admin.create(aOnj);
+            adminToken = jwt.sign({
+                id: admin.id,
+                role: 'ADMIN',
+                username: admin.username,
+                email: admin.email,
+                profile_image: admin.profile_image
+            }, process.env.SECRET, { expiresIn: '24h' });
+            devValues.push({
+                user: "ADMIN",
+                token: adminToken
+            });
+
+            let expDate = new Date();
+            // expDate.setDate(expDate.getDate() + );
             let lOnj = {
                 username: "Test Yadav",
                 email: "astroboiscosmos@gmail.com",
@@ -46,14 +60,24 @@ models.Sequelize = Sequelize;
                     plan_type: "STANDARDLANDLORD",
                     payment_id: "NA",
                     order_id: "NA",
+                    exp_date: expDate,
                     payment_method: "NA",
                     status: true
                 },
                 address: "122 bhagirath colony dharnaka",
-                verification_status: false,
+                verification_status: true,
                 verified_email: true
             }
             let landlord = await models.landlord.create(lOnj, {
+                include: [
+                    {
+                        model: models.subscription_plan, as: "subscription_plans"
+                    }
+                ]
+            });
+            lOnj.email = "abc@gmail.com"
+            lOnj.verification_status = false;
+            await models.landlord.create(lOnj, {
                 include: [
                     {
                         model: models.subscription_plan, as: "subscription_plans"
@@ -82,9 +106,10 @@ models.Sequelize = Sequelize;
                 phone_no: "7689543216",
                 password: bcrypt.hashSync("Tenant@123456"),
                 subscription_plans: {
-                    plan_type: "FREETENANT",
+                    plan_type: "PREMIUMTENANT",
                     payment_id: "NA",
                     order_id: "NA",
+                    exp_date: expDate,
                     payment_method: "NA",
                     status: true
                 },
@@ -123,6 +148,7 @@ models.Sequelize = Sequelize;
                     property_type: "HOUSE",
                     offer_type: "SELL",
                     property_name: "Cozy Cottage",
+                    publish_status: true,
                     verification_status: true,
                     state: "Andaman and Nicobar Islands",
                     district: "South Andaman",
@@ -141,6 +167,7 @@ models.Sequelize = Sequelize;
                     property_type: "ROOM",
                     offer_type: "RENT",
                     property_name: "Luxury Penthouse",
+                    publish_status: true,
                     verification_status: true,
                     state: "Andhra Pradesh",
                     district: "Addanki",
@@ -159,6 +186,7 @@ models.Sequelize = Sequelize;
                     property_type: "HOUSE",
                     offer_type: "SELL",
                     property_name: "Modern Condo",
+                    publish_status: false,
                     verification_status: true,
                     state: "Assam",
                     district: "Bihpuriagaon",
@@ -177,6 +205,7 @@ models.Sequelize = Sequelize;
                     property_type: "SHOP",
                     offer_type: "RENT",
                     property_name: "Family Home",
+                    publish_status: false,
                     verification_status: true,
                     state: "Assam",
                     district: "Bihpuriagaon",

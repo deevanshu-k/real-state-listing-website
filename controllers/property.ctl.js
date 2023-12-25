@@ -3,7 +3,7 @@ const validation = require("../helpers/validation");
 const db = require("../models");
 const { DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 const s3 = require("../lib/s3storage");
-
+const mail = require("../helpers/mail");
 
 let property = {};
 
@@ -22,7 +22,7 @@ let property = {};
     } object
 */
 
-
+/* Landlord Controllers */
 property.getAllProperties = async (req, res) => {
     try {
         // Return all properties of landlord ID (req.user.id) provided
@@ -35,6 +35,7 @@ property.getAllProperties = async (req, res) => {
                 property_type: property.property_type,
                 offer_type: property.offer_type,
                 property_name: property.property_name,
+                publish_status: property.publish_status,
                 verification_status: property.verification_status,
                 state: property.state,
                 district: property.district,
@@ -117,6 +118,7 @@ property.createProperty = async (req, res) => {
             attached_bathroom,
             include_water_price,
             include_electricity_price,
+            publish_status: false,
             verification_status: false,
             rating: 0,
         })
@@ -274,7 +276,7 @@ property.getProperty = async (req, res) => {
                 as: 'images', // Specify the alias used 
                 attributes: ['id', 'img_url'],
             },
-            attributes: ['id', 'offer_type', 'property_type', 'property_name', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
+            attributes: ['id', 'offer_type', 'property_type', 'property_name', 'publish_status', 'verification_status', 'state', 'district', 'zipcode', 'remark', 'no_of_rooms', 'price', 'attached_kitchen', 'attached_bathroom', 'include_water_price', 'include_electricity_price', 'rating']
         });
 
         if (property) {
@@ -300,6 +302,64 @@ property.getProperty = async (req, res) => {
     }
 }
 
+property.publishProperty = async (req, res) => {
+    try {
+        const user = req.user
+
+        // Get propertyId And publish From Query
+        const { propertyId, publish } = req.query;
+        if (!propertyId || (publish != 'true' && publish != 'false')) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST,
+            })
+        }
+
+        // Check If Property Belongs to landlord
+        const property = await db.property.findOne({ where: { landlordId: req.user.id, id: propertyId } });
+        if (!property) {
+            return res.status(Constant.BAD_REQUEST).json({
+                code: Constant.BAD_REQUEST,
+                message: Constant.REQUEST_BAD_REQUEST,
+            })
+        }
+
+        // Check If Landlord Allowed to publish more property
+        if (publish === 'true') {
+            const propertyLimit = Constant.PLANS[user.subscription_plan].no_of_property
+            const countPublishedProperty = await db.property.count({ where: { landlordId: user.id, publish_status: true } });
+            if (countPublishedProperty >= propertyLimit) { // BUG: What is somehow more than allowed propety already exist
+                return res.status(Constant.FORBIDDEN_CODE).json({
+                    code: Constant.FORBIDDEN_CODE,
+                    message: Constant.SUBSCRIPTION_PLAN_LIMIT_REACHED
+                });
+            }
+        }
+
+        // Update Property Publish Status
+        await db.property.update({
+            publish_status: publish
+        }, {
+            where: {
+                id: propertyId,
+                landlordId: user.id,
+                verification_status: true
+            }
+        });
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+
+    } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
 /* Admin Controllers */
 property.adminGetAllProperty = async (req, res) => {
     try {
@@ -314,6 +374,99 @@ property.adminGetAllProperty = async (req, res) => {
         return res.status(Constant.SUCCESS_CODE).json(allProperties);
 
     } catch (error) {
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
+property.adminPropertyVerify = async (req, res) => {
+    try {
+        //Get propertyId from req.params
+        const { propertyId } = req.params;
+
+        // Verify Property
+        await db.property.update({
+            verification_status: true
+        }, {
+            where: {
+                id: propertyId
+            }
+        });
+
+        // Get Property
+        const property = await db.property.findOne({
+            where: {
+                id: propertyId
+            }
+        });
+        const landlord = await db.landlord.findOne({
+            id: property.landlordId
+        });
+
+        // Send mail
+        await mail.sendEmailToLandlordPropertyVerified({
+            email: landlord.email,
+            username: landlord.username,
+            propertyname: property.property_name
+        });
+
+        // Successfully Verified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG,
+        })
+    }
+}
+
+property.adminPropertyUnverify = async (req, res) => {
+    try {
+        //Get propertyId from req.params
+        const { propertyId } = req.params;
+        const { message } = req.body;
+
+        // Verify Property
+        await db.property.update({
+            verification_status: false,
+            publish_status: false
+        }, {
+            where: {
+                id: propertyId
+            }
+        });
+
+        // Get Property
+        const property = await db.property.findOne({
+            where: {
+                id: propertyId
+            }
+        });
+        const landlord = await db.landlord.findOne({
+            id: property.landlordId
+        });
+
+        // Send mail
+        await mail.sendEmailToLandlordPropertyUnverified({
+            email: landlord.email,
+            username: landlord.username,
+            propertyname: property.property_name,
+            message: message ? message : "No Message"
+        });
+
+        // Successfully Unverified
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            message: Constant.UPDATE_SUCCESS
+        });
+    } catch (error) {
+        console.log(error);
         return res.status(Constant.SERVER_ERROR).json({
             code: Constant.SERVER_ERROR,
             message: Constant.SOMETHING_WENT_WRONG,

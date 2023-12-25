@@ -48,6 +48,43 @@ userControllers.getUserDocuments = async (req, res) => {
     }
 }
 
+userControllers.getUserDetails = async (req, res) => {
+    try {
+        const { role, id } = req.user;
+        let userdetails = {};
+
+        if (role === 'TENANT') {
+            userdetails = await db.tenant.findOne({
+                where: { id: id },
+                attributes: ['id', 'username', 'email', 'phone_no', 'key', 'profile_image', 'address', 'verification_status']
+            });
+        }
+        else if (role === 'LANDLORD') {
+            userdetails = await db.landlord.findOne({
+                where: { id: id },
+                attributes: ['id', 'username', 'email', 'phone_no', 'key', 'profile_image', 'address', 'verification_status']
+            });
+        }
+        else if (role === 'ADMIN') {
+            userdetails = await db.admin.findOne({
+                where: { id: id },
+                attributes: ['id', 'username', 'email', 'key', 'profile_image']
+            });
+        }
+
+        return res.status(Constant.SUCCESS_CODE).json({
+            code: Constant.SUCCESS_CODE,
+            data: userdetails
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(Constant.SERVER_ERROR).json({
+            code: Constant.SERVER_ERROR,
+            message: Constant.SOMETHING_WENT_WRONG
+        })
+    }
+}
+
 /*
     Admin Controller Methods
 */
