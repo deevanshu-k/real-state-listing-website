@@ -20,7 +20,7 @@ module.exports = {
     SAVE_SUCCESS: 'Requested record created successfully',
     VERIFY_EMAIL: 'Verify your email',
     VERIFIED_SUCCESSFULLY: 'Email verified successfully',
-    USER_TOKEN_EXPIRED: 'Your section is expired, Login again',
+    USER_TOKEN_EXPIRED: 'Your session is expired, Login again',
     USER_TOKEN_NOTFOUND: 'You are not logged in, Login now',
     LOGIN_LIMIT_REACHED: 'Too many login request, try after some time!',
     UNAUTHORIZED_REQUEST: 'Unauthorized request !',
@@ -58,6 +58,9 @@ module.exports = {
     PROPERTY_ADDIMAGE_LIMIT_EXCEED:"Property Images Limit Exceed !",
     NO_PROPERTY_IMAGE_SELECTED: "No Image Selected !",
 
+    //User Update
+    INVALID_PHONE:"Invalid Phone Number!",
+
     PLANS: {
         "PREMIUMTENANT": {
             type: "PREMIUMTENANT",
@@ -83,5 +86,6 @@ module.exports = {
         }
     },
     PROPERTY_TYPE: ['ROOM', 'HOUSE', 'FLAT', 'COMMERCIAL_SPACE'],
-    OFFER_TYPE: ['RENT','SELL']
+    OFFER_TYPE: ['RENT','SELL'],
+    PHONE_REGEX : /^\d{10}$/
 }
