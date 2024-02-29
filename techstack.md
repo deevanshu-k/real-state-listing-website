@@ -3,12 +3,12 @@
 ## Tech Stack
 deevanshu-k/real-state-listing-website is built on the following main stack:
 
-- [MySQL](http://www.mysql.com) – Databases
-- [ExpressJS](http://expressjs.com/) – Microframeworks (Backend)
 - [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
-- [Nodemailer](http://www.nodemailer.com/) – Transactional Email
-- [Razorpay](https://razorpay.com/) – Payment Services
+- [ExpressJS](http://expressjs.com/) – Microframeworks (Backend)
+- [MySQL](http://www.mysql.com) – Databases
 - [nodemon](http://nodemon.io/) – node.js Application Monitoring
+- [Razorpay](https://razorpay.com/) – Payment Services
+- [Nodemailer](http://www.nodemailer.com/) – Transactional Email
 
 Full tech stack [here](/techstack.md)
 
@@ -18,12 +18,12 @@ Full tech stack [here](/techstack.md)
 ## Tech Stack
 deevanshu-k/real-state-listing-website is built on the following main stack:
 
-- <img width='25' height='25' src='https://img.stackshare.io/service/1025/logo-mysql-170x170.png' alt='MySQL'/> [MySQL](http://www.mysql.com) – Databases
-- <img width='25' height='25' src='https://img.stackshare.io/service/1163/hashtag.png' alt='ExpressJS'/> [ExpressJS](http://expressjs.com/) – Microframeworks (Backend)
 - <img width='25' height='25' src='https://img.stackshare.io/service/1209/javascript.jpeg' alt='JavaScript'/> [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) – Languages
-- <img width='25' height='25' src='https://img.stackshare.io/service/2862/qr2-jCLr.jpg' alt='Nodemailer'/> [Nodemailer](http://www.nodemailer.com/) – Transactional Email
-- <img width='25' height='25' src='https://img.stackshare.io/service/4974/default_0a8cdd8c04e099921684cc50ad6fde912bf4a690.png' alt='Razorpay'/> [Razorpay](https://razorpay.com/) – Payment Services
+- <img width='25' height='25' src='https://img.stackshare.io/service/1163/hashtag.png' alt='ExpressJS'/> [ExpressJS](http://expressjs.com/) – Microframeworks (Backend)
+- <img width='25' height='25' src='https://img.stackshare.io/service/1025/logo-mysql-170x170.png' alt='MySQL'/> [MySQL](http://www.mysql.com) – Databases
 - <img width='25' height='25' src='https://img.stackshare.io/service/5577/preview.png' alt='nodemon'/> [nodemon](http://nodemon.io/) – node.js Application Monitoring
+- <img width='25' height='25' src='https://img.stackshare.io/service/4974/default_0a8cdd8c04e099921684cc50ad6fde912bf4a690.png' alt='Razorpay'/> [Razorpay](https://razorpay.com/) – Payment Services
+- <img width='25' height='25' src='https://img.stackshare.io/service/2862/qr2-jCLr.jpg' alt='Nodemailer'/> [Nodemailer](http://www.nodemailer.com/) – Transactional Email
 
 Full tech stack [here](/techstack.md)
 
@@ -34,7 +34,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [deevanshu-k/real-state-listing-website](https://github.com/deevanshu-k/real-state-listing-website)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|21<br/>Tools used|02/01/24 <br/>Report generated|
+|21<br/>Tools used|02/29/24 <br/>Report generated|
 |------|------|
 </div>
 
